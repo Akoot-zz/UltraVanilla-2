@@ -1,6 +1,6 @@
-package com.akoot.x416.ultravanilla;
+package net.akoot.plugins.ultravanilla;
 
-import com.akoot.x416.ultravanilla.reference.UserPaths;
+import net.akoot.plugins.ultravanilla.reference.UserPaths;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;

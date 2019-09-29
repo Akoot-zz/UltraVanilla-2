@@ -4,19 +4,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.akoot.x416</groupId>
+    <groupId>net.akoot.plugins</groupId>
     <artifactId>UltraVanilla</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>UltraVanilla</name>
 
-    <description>Core plugin for UItraVanilla</description>
+    <description>Core plugin for UltraVanilla</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <url>ultravanilla.net/plugins/ultravanilla</url>
+    <url>https://akoot.net/plugins/ultravanilla</url>
 
     <build>
         <defaultGoal>clean package</defaultGoal>
@@ -45,6 +45,14 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+                    <outputDirectory>src/test/resources/server/plugins</outputDirectory>
+                </configuration>
             </plugin>
         </plugins>
         <resources>

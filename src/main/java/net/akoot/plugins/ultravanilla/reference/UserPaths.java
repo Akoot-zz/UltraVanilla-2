@@ -1,4 +1,4 @@
-package com.akoot.x416.ultravanilla.reference;
+package net.akoot.plugins.ultravanilla.reference;
 
 public class UserPaths {
 

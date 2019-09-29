@@ -1,4 +1,4 @@
-package com.akoot.x416.ultravanilla.util;
+package net.akoot.plugins.ultravanilla.util;
 
 import java.util.ArrayList;
 import java.util.List;

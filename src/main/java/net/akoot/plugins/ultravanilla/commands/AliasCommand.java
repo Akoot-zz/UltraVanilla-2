@@ -1,6 +1,6 @@
-package com.akoot.x416.ultravanilla.commands;
+package net.akoot.plugins.ultravanilla.commands;
 
-import com.akoot.x416.ultravanilla.UltraVanilla;
+import net.akoot.plugins.ultravanilla.UltraVanilla;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

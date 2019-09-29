@@ -1,9 +1,9 @@
 name: UltraVanilla
 version: ${project.version}
-main: com.akoot.x416.ultravanilla.UltraVanilla
+main: net.akoot.plugins.ultravanilla.UltraVanilla
 api-version: 1.13
 prefix: UV
-loadbefore: [AdminVanilla]
+loadbefore: [AdminVanilla, ExtraVanilla]
 authors: [Akoot_]
 description: Core plugin for UItraVanilla
-website: ultravanilla.net/plugins/ultravanilla
+website: https://akoot.net/plugins/ultravanilla

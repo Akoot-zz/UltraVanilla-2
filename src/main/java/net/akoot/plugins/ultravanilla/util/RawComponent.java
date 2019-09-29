@@ -1,4 +1,4 @@
-package com.akoot.x416.ultravanilla.util;
+package net.akoot.plugins.ultravanilla.util;
 
 public class RawComponent {
 
