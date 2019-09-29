@@ -9,11 +9,11 @@ import org.bukkit.command.TabExecutor;
 
 import java.util.List;
 
-public class Alias extends UltraCommand implements CommandExecutor, TabExecutor {
+public class AliasCommand extends UltraCommand implements CommandExecutor, TabExecutor {
 
     public static final ChatColor COLOR = ChatColor.WHITE;
 
-    public Alias(UltraVanilla instance) {
+    public AliasCommand(UltraVanilla instance) {
         super(instance);
         this.color = COLOR;
     }
