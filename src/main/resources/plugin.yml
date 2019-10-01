@@ -7,3 +7,19 @@ loadbefore: [AdminVanilla, ExtraVanilla]
 authors: [Akoot_]
 description: Core plugin for UItraVanilla
 website: https://akoot.net/plugins/ultravanilla
+commands:
+  ultravanilla:
+    description: UltraVanilla command
+    permission: ultravanilla.command.ultravanilla
+    aliases: [uv]
+    usage: |
+      /ultravanilla
+      /ultravanilla reload
+  user:
+    description: View, edit and delete values from a player
+    permission: ultravanilla.command.user
+    usage: |
+      /user set <key> <value>
+      /user delete <key>
+      /user add <value> <key>
+      /user remove <value> <key>

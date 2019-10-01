@@ -1,10 +1,11 @@
 package net.akoot.plugins.ultravanilla.commands;
 
-import net.akoot.plugins.ultravanilla.UltraVanilla;
+import net.akoot.plugins.ultravanilla.Strings;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +15,20 @@ import java.util.regex.Pattern;
 
 public class UltraCommand {
 
-    public ChatColor color = ChatColor.WHITE;
-    protected UltraVanilla plugin;
+    public ChatColor color;
+    protected JavaPlugin plugin;
     protected Random random;
+    protected Strings strings;
 
-    public UltraCommand(UltraVanilla instance) {
-        this.plugin = instance;
+    public UltraCommand(JavaPlugin plugin, Strings strings, ChatColor color) {
+        this.plugin = plugin;
+        this.strings = strings;
+        this.random = new Random();
+        this.color = color;
+    }
+
+    public UltraCommand(JavaPlugin plugin, Strings strings) {
+        this(plugin, strings, ChatColor.WHITE);
     }
 
     /**
@@ -123,9 +132,6 @@ public class UltraCommand {
      */
     protected List<Player> getPlayers(String arg) {
 
-        // Generate random
-        random = new Random();
-
         // Create the list of players to return
         List<Player> players = new ArrayList<>();
 
@@ -182,8 +188,8 @@ public class UltraCommand {
      * @return The formatted string
      */
     protected String format(Command command, String key) {
-        String string = plugin.getCommandString(command, key);
-        return color + string.replace("&{color}", color.toString());
+        String string = strings.getCommandString(command, key);
+        return color + string.replace("&:", color.toString());
     }
 
     /**
@@ -195,8 +201,8 @@ public class UltraCommand {
      * @return The formatted string
      */
     protected String format(Command command, String key, String... format) {
-        String string = plugin.getFormattedCommandString(command, key, format);
-        return color + string.replace("&{color}", color.toString());
+        String string = strings.getFormattedCommandString(command, key, format);
+        return color + string.replace("&:", color.toString());
     }
 
     /**
@@ -235,8 +241,31 @@ public class UltraCommand {
         try {
             return Integer.parseInt(arg);
         } catch (NumberFormatException e) {
-            sender.sendMessage(plugin.getString("not-a-number", "{number}", arg));
+            sender.sendMessage(strings.getString("not-a-number", "{number}", arg));
             return -1;
         }
+    }
+
+    protected String list(Command command, String key, List<String> values, String... format) {
+
+        String list = "";
+        String title = message(command, key + ".title", format);
+        list += title;
+        for (String value : values) {
+            String item = message(command, key + ".item", "%v", value);
+            list += item;
+        }
+        return list;
+    }
+
+    /**
+     * Return whether the sender has permission to issue a command
+     *
+     * @param sender     The sender
+     * @param permission The permission node
+     * @return Whether or not the sender has the permission node
+     */
+    protected boolean hasPermission(CommandSender sender, Command command, String permission) {
+        return sender.hasPermission(String.format("%s.command.%s.%s", plugin.getName().toLowerCase(), command.getName(), permission));
     }
 }

@@ -2,8 +2,8 @@ package net.akoot.plugins.ultravanilla.reference;
 
 public class UserPaths {
 
-    public static final String NICKNAME = "custom.chat.name.nick";
-    public static final String NAME_COLOR = "custom.chat.name.color";
-    public static final String MESSAGE_COLOR = "custom.chat.message.color";
     public static final String PAST_NAMES = "info.past-names";
+    public static final String LAST_LEAVE = "info.last-leave";
+    public static final String FIRST_JOIN = "info.first-join";
+    public static final String LAST_POSITION = "info.last-position";
 }

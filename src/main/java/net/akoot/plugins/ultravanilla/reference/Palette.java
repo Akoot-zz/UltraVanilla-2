@@ -34,16 +34,11 @@ public class Palette {
     public static String translate(String text) {
 
         // Rainbow text
-        if (text.contains("&x")) {
-            String[] toColor = getRegex("&x[^&]*", text);
+        if (text.contains("&h")) {
+            String[] toColor = getRegex("&h[^&]*", text);
             for (String s : toColor) {
                 text = text.replace(s, rainbow(s.substring(2)));
             }
-        }
-
-        // Random color text
-        if (text.contains("&h")) {
-            text = text.replace("&h", "" + ChatColor.values()[random.nextInt(ChatColor.values().length)]);
         }
 
         //TODO: read from config
@@ -52,10 +47,10 @@ public class Palette {
                 .replace("&>", VERB + "")
                 .replace("&#", NUMBER + "")
                 .replace("&.", OBJECT + "")
-                .replace("&wrong", WRONG + "")
-                .replace("&right", RIGHT + "")
-                .replace("&true", TRUE + "")
-                .replace("&false", FALSE + "")
+                .replace("&w", WRONG + "")
+                .replace("&y", RIGHT + "")
+                .replace("&t", TRUE + "")
+                .replace("&x", FALSE + "")
         ;
 
         // Convert & to
