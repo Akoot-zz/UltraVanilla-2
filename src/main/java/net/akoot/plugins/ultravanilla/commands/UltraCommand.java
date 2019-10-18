@@ -277,7 +277,7 @@ public class UltraCommand {
     }
 
     /**
-     * Return whether the sender has permission to issue a command
+     * Return whether the sender has permission to issue a command.
      *
      * @param sender     The sender
      * @param permission The permission node
@@ -288,7 +288,7 @@ public class UltraCommand {
     }
 
     /**
-     * Check if a player has joined before or is online
+     * Check if a player has joined before or is online.
      *
      * @param player The player
      * @return Whether or not a player is valid
@@ -298,7 +298,7 @@ public class UltraCommand {
     }
 
     /**
-     * Get a list of usernames from all the players who have joined the game once
+     * Get a list of usernames from all the players who have joined the game once.
      *
      * @return A list of usernames from all the players who have joined the game once
      */
@@ -308,5 +308,23 @@ public class UltraCommand {
             offlinePlayerNames.add(player.getName());
         }
         return offlinePlayerNames;
+    }
+
+    /**
+     * Get suggestions based on what the user has typed, like if they start typing the beginning of a suggestion then
+     * only show the suggestions that start with that argument.
+     *
+     * @param suggestions All of the possible suggestions based on the argument count
+     * @param args        The arguments the user has passed
+     * @return The list of suggestions which are relevant to the query
+     */
+    protected List<String> getSuggestions(List<String> suggestions, String[] args) {
+        List<String> realSuggestions = new ArrayList<>();
+        for (String s : suggestions) {
+            if (args[args.length - 1].length() < args.length || s.toLowerCase().startsWith(args[args.length - 1].toLowerCase())) {
+                realSuggestions.add(s);
+            }
+        }
+        return realSuggestions;
     }
 }
