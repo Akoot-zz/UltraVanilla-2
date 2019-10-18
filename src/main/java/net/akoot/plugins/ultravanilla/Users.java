@@ -16,16 +16,30 @@ public class Users {
     public static final File DIR = new File(UltraVanilla.getInstance().getDataFolder().getParentFile().getParentFile(), "users");
     private static Map<UUID, YamlConfiguration> users = new HashMap<>();
 
+    /**
+     * Registers the player's config to memory
+     *
+     * @param player The player who's config you wish to save to memory
+     */
     public static void registerUser(Player player) {
         users.put(player.getUniqueId(), Users.getOfflineConfig(player));
     }
 
+    /**
+     * Unregisters the player's config from memory
+     * @param player The player who's config you want to remove from memory
+     */
     public static void unregisterUser(Player player) {
         saveUser(player);
         users.remove(player.getUniqueId());
     }
 
-    public static void saveUser(Player player) {
+    /**
+     * Save a player configuration file with the stuff in memory
+     *
+     * @param player The player who's data you wish to save
+     */
+    public static void saveUser(OfflinePlayer player) {
         try {
             getUser(player).save(getUserFile(player));
         } catch (IOException e) {
@@ -33,15 +47,25 @@ public class Users {
         }
     }
 
-    public static YamlConfiguration getUser(Player player) {
-        return users.containsKey(player.getUniqueId()) ? users.get(player.getUniqueId()) : new YamlConfiguration();
+    /**
+     * Get the configuration file for a player
+     *
+     * @param player The player (online or offline)
+     * @return The configuration for the player
+     */
+    public static YamlConfiguration getUser(OfflinePlayer player) {
+        if (player.isOnline()) {
+            return users.containsKey(player.getUniqueId()) ? users.get(player.getUniqueId()) : new YamlConfiguration();
+        } else {
+            return getOfflineConfig(player);
+        }
     }
 
     /**
-     * Retrieve a YamlConfiguration object
+     * Retrieve a YamlConfiguration object for a player who is offline (reading file rather than memory)
      *
-     * @param player
-     * @return
+     * @param player The player who is offline
+     * @return The configuration for the offline player
      */
     public static YamlConfiguration getOfflineConfig(OfflinePlayer player) {
         YamlConfiguration config = new YamlConfiguration();

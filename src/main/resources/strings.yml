@@ -1,5 +1,8 @@
 error:
-  no-permission: "&xYou do not have permission to &w&>%a."
+  no-permission: "&xYou do not have permission to &w&>%a&x."
+  player-only: "&xYou must be a player in order to &w&>%a&x."
+  player-null: "&xPlayer not '&w%p&x' was never online!"
+  player-offline: "&xPlayer not '&w%p&x' is not online!"
 command:
   ultravanilla:
     message:

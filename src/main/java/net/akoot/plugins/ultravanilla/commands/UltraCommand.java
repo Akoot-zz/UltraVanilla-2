@@ -1,7 +1,9 @@
 package net.akoot.plugins.ultravanilla.commands;
 
 import net.akoot.plugins.ultravanilla.Strings;
+import net.akoot.plugins.ultravanilla.UltraVanilla;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -19,12 +21,14 @@ public class UltraCommand {
     protected JavaPlugin plugin;
     protected Random random;
     protected Strings strings;
+    protected Strings uvStrings;
 
     public UltraCommand(JavaPlugin plugin, Strings strings, ChatColor color) {
         this.plugin = plugin;
         this.strings = strings;
         this.random = new Random();
         this.color = color;
+        this.uvStrings = UltraVanilla.getInstance().getStrings();
     }
 
     public UltraCommand(JavaPlugin plugin, Strings strings) {
@@ -246,14 +250,28 @@ public class UltraCommand {
         }
     }
 
+    /**
+     * Get a formatted list for the specified command.
+     *
+     * @param command The command
+     * @param key     The key
+     * @param values  The items to display as lists
+     * @param format  The global format for this list
+     * @return The formatted list string
+     */
     protected String list(Command command, String key, List<String> values, String... format) {
 
         String list = "";
         String title = message(command, key + ".title", format);
         list += title;
-        for (String value : values) {
-            String item = message(command, key + ".item", "%v", value);
-            list += item;
+        for (int i = 0; i < values.size(); i++) {
+            String item = message(command, key + ".item", "%v", values.get(i));
+            if (i == values.size() - 1) {
+                if (item.endsWith("%, ")) {
+                    item = item.substring(0, item.length() - 3);
+                }
+            }
+            list += item.replaceAll("%,", ",");
         }
         return list;
     }
@@ -267,5 +285,28 @@ public class UltraCommand {
      */
     protected boolean hasPermission(CommandSender sender, Command command, String permission) {
         return sender.hasPermission(String.format("%s.command.%s.%s", plugin.getName().toLowerCase(), command.getName(), permission));
+    }
+
+    /**
+     * Check if a player has joined before or is online
+     *
+     * @param player The player
+     * @return Whether or not a player is valid
+     */
+    protected boolean isValid(OfflinePlayer player) {
+        return (player.hasPlayedBefore() || player.isOnline());
+    }
+
+    /**
+     * Get a list of usernames from all the players who have joined the game once
+     *
+     * @return A list of usernames from all the players who have joined the game once
+     */
+    protected List<String> getOfflinePlayerNames() {
+        List<String> offlinePlayerNames = new ArrayList<>();
+        for (OfflinePlayer player : plugin.getServer().getOfflinePlayers()) {
+            offlinePlayerNames.add(player.getName());
+        }
+        return offlinePlayerNames;
     }
 }
