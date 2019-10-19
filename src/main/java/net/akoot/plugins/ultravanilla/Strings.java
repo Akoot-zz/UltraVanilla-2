@@ -14,8 +14,12 @@ public class Strings {
 
     private YamlConfiguration strings;
     private File stringsFile;
+    private Class root;
 
     public Strings(JavaPlugin plugin, Class root) {
+
+        // Set the root class to search for internal jar files
+        this.root = root;
 
         // Create a YamlConfiguration instance
         strings = new YamlConfiguration();
@@ -35,6 +39,9 @@ public class Strings {
      */
     public void reload() {
         try {
+            if (!stringsFile.exists()) {
+                IOUtil.copyDefaults(stringsFile, root);
+            }
             strings.load(stringsFile);
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();

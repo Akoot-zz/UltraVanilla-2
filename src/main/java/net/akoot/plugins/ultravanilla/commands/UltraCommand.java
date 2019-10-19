@@ -264,6 +264,9 @@ public class UltraCommand {
         String list = "";
         String title = message(command, key + ".title", format);
         list += title;
+        if (values.isEmpty()) {
+            return list + uvStrings.getString("misc.none");
+        }
         for (int i = 0; i < values.size(); i++) {
             String item = message(command, key + ".item", "%v", values.get(i));
             if (i == values.size() - 1) {
