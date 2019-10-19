@@ -1,51 +1,13 @@
 package net.akoot.plugins.ultravanilla;
 
 import net.akoot.plugins.ultravanilla.reference.Palette;
-import net.akoot.plugins.ultravanilla.util.IOUtil;
 import org.bukkit.command.Command;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
-
-public class Strings {
-
-    private YamlConfiguration strings;
-    private File stringsFile;
-    private Class root;
+public class Strings extends Config {
 
     public Strings(JavaPlugin plugin, Class root) {
-
-        // Set the root class to search for internal jar files
-        this.root = root;
-
-        // Create a YamlConfiguration instance
-        strings = new YamlConfiguration();
-
-        // Create a stringsFile reference
-        stringsFile = new File(plugin.getDataFolder(), "strings.yml");
-
-        // Copy defaults from the jar for strings.yml if needed
-        IOUtil.copyDefaults(stringsFile, root);
-
-        // Load the configuration from file
-        reload();
-    }
-
-    /**
-     * Reload the strings object with the info written on file
-     */
-    public void reload() {
-        try {
-            if (!stringsFile.exists()) {
-                IOUtil.copyDefaults(stringsFile, root);
-            }
-            strings.load(stringsFile);
-        } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
+        super(plugin, root, "strings.yml");
     }
 
     /**
@@ -67,7 +29,7 @@ public class Strings {
      * @return The string
      */
     public String getString(String key) {
-        String string = strings.getString(key);
+        String string = config.getString(key);
         if (string != null) {
             return Palette.translate(string);
         }
@@ -82,7 +44,7 @@ public class Strings {
      * @return The formatted string
      */
     public String getFormattedString(String key, String... format) {
-        String string = strings.getString(key);
+        String string = config.getString(key);
         if (string != null) {
             for (int i = 0; i < format.length; i += 2) {
                 string = string.replace(format[i], format[i + 1]);
@@ -100,7 +62,7 @@ public class Strings {
      * @return The string
      */
     public String getCommandString(Command command, String key) {
-        return strings.getString("command." + command.getName() + "." + key);
+        return config.getString("command." + command.getName() + "." + key);
     }
 
     /**
