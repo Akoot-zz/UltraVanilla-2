@@ -58,10 +58,6 @@ public final class UltraVanilla extends JavaPlugin {
 
     @Override
     public void onDisable() {
-//        //TODO: COMMENT THIS OUT FOR PRODUCTION
-//        for (File f : getDataFolder().listFiles()) {
-//            f.delete();
-//        }
     }
 
 }
