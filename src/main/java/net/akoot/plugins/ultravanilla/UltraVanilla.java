@@ -32,12 +32,12 @@ public final class UltraVanilla extends JavaPlugin {
         // Register serializable classes
         ConfigurationSerialization.registerClass(Position.class);
 
-        // Register strings instance for this plugin
-        strings = new Strings(instance, getClass());
-
         // Create directories
         getDataFolder().mkdir();
         Users.DIR.mkdir();
+
+        // Register strings instance for this plugin
+        strings = new Strings(instance, getClass());
 
         // Copy defaults from the jar for config.yml if needed
         IOUtil.copyDefaults(new File(getDataFolder(), "config.yml"), getClass());
