@@ -96,6 +96,23 @@ public class Users {
     }
 
     /**
+     * Set a value in a player's config in memory
+     *
+     * @param player The player
+     * @param key    The key
+     * @param value  The desired value
+     */
+    public static void set(Player player, String key, Object value) {
+        YamlConfiguration config = getUser(player);
+        config.set(key, value);
+        try {
+            config.save(getUserFile(player));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Set a value in a player's config
      *
      * @param player The player
