@@ -102,7 +102,7 @@ public class Users {
      * @param key    The key
      * @param value  The desired value
      */
-    public static void set(OfflinePlayer player, String key, String value) {
+    public static void set(OfflinePlayer player, String key, Object value) {
         YamlConfiguration config = getOfflineConfig(player);
         config.set(key, value);
         try {
