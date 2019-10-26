@@ -21,15 +21,17 @@ public class UltravanillaCommand extends UltraCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
+        this.command = command;
+
         // Sub-commands: reload
         if (args.length == 1) {
 
             // reload
             if (args[0].equalsIgnoreCase("reload")) {
-                if (hasPermission(sender, command, "reload")) {
+                if (hasPermission(sender, "reload")) {
                     plugin.reloadConfig();
                     strings.reload();
-                    sender.sendMessage(message(command, "reload"));
+                    sender.sendMessage(message("reload"));
                 } else {
                     sender.sendMessage(strings.getString("error.no-permission", "%a", "reload the configs"));
                 }

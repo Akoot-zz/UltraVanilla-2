@@ -22,6 +22,7 @@ public class UltraCommand {
     protected Random random;
     protected Strings strings;
     protected Strings uvStrings;
+    protected Command command;
 
     public UltraCommand(JavaPlugin plugin, Strings strings, ChatColor color) {
         this.plugin = plugin;
@@ -187,11 +188,10 @@ public class UltraCommand {
     /**
      * Get a non-formatted string from config.yml in the 'command' section.
      *
-     * @param command The command
      * @param key     The name of the key after 'strings.'
      * @return The formatted string
      */
-    protected String format(Command command, String key) {
+    protected String format(String key) {
         String string = strings.getCommandString(command, key);
         return color + string.replace("&:", color.toString());
     }
@@ -199,12 +199,11 @@ public class UltraCommand {
     /**
      * Get a formatted string from config.yml in the 'command' section.
      *
-     * @param command The command
      * @param key     The name of the key after 'strings.'
      * @param format  The placeholder(s) and replacement(s)
      * @return The formatted string
      */
-    protected String format(Command command, String key, String... format) {
+    protected String format(String key, String... format) {
         String string = strings.getFormattedCommandString(command, key, format);
         return color + string.replace("&:", color.toString());
     }
@@ -212,25 +211,23 @@ public class UltraCommand {
     /**
      * Get a formatted message for the specified command.
      *
-     * @param command The command
      * @param key     The name of the key after 'strings.'
      * @param format  The placeholder(s) and replacement(s)
      * @return The formatted string
      */
-    protected String message(Command command, String key, String... format) {
-        return format(command, "message." + key, format);
+    protected String message(String key, String... format) {
+        return format("message." + key, format);
     }
 
     /**
      * Get a formatted error message for the specified command.
      *
-     * @param command The command
      * @param key     The name of the key after 'strings.'
      * @param format  The placeholder(s) and replacement(s)
      * @return The formatted error string
      */
-    protected String error(Command command, String key, String... format) {
-        return format(command, "error." + key, format);
+    protected String error(String key, String... format) {
+        return format("error." + key, format);
     }
 
 
@@ -253,22 +250,21 @@ public class UltraCommand {
     /**
      * Get a formatted list for the specified command.
      *
-     * @param command The command
      * @param key     The key
      * @param values  The items to display as lists
      * @param format  The global format for this list
      * @return The formatted list string
      */
-    protected String list(Command command, String key, List<String> values, String... format) {
+    protected String list(String key, List<String> values, String... format) {
 
         String list = "";
-        String title = message(command, key + ".title", format);
+        String title = message(key + ".title", format);
         list += title;
         if (values.isEmpty()) {
             return list + uvStrings.getString("misc.none");
         }
         for (int i = 0; i < values.size(); i++) {
-            String item = message(command, key + ".item", "%v", values.get(i));
+            String item = message(key + ".item", "%v", values.get(i));
             if (i == values.size() - 1) {
                 if (item.endsWith("%, ")) {
                     item = item.substring(0, item.length() - 3);
@@ -286,7 +282,7 @@ public class UltraCommand {
      * @param permission The permission node
      * @return Whether or not the sender has the permission node
      */
-    protected boolean hasPermission(CommandSender sender, Command command, String permission) {
+    protected boolean hasPermission(CommandSender sender, String permission) {
         return sender.hasPermission(String.format("%s.command.%s.%s", plugin.getName().toLowerCase(), command.getName(), permission));
     }
 

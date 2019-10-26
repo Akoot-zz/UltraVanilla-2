@@ -18,6 +18,11 @@ public class TemplateCommand extends UltraCommand implements CommandExecutor, Ta
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+
+        this.command = command;
+
+        
+
         return false;
     }
 
