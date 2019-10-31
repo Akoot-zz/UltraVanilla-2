@@ -21,7 +21,6 @@ public class TemplateCommand extends UltraCommand implements CommandExecutor, Ta
 
         this.command = command;
 
-        
 
         return false;
     }

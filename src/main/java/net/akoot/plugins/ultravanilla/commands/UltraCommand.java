@@ -100,7 +100,7 @@ public class UltraCommand {
      */
     protected String getArg(String[] args, int index) {
         String message = "";
-        for (int i = index - 1; i < args.length; i++) {
+        for (int i = index; i < args.length; i++) {
             message += args[i] + " ";
         }
         return message.trim();

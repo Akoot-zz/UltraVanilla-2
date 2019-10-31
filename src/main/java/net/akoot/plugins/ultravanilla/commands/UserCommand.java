@@ -23,12 +23,14 @@ public class UserCommand extends UltraCommand implements CommandExecutor, TabCom
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
+        this.command = command;
+
         // Tests
         Player player = (Player) sender;
         YamlConfiguration config = Users.getUser(player);
-        sender.sendMessage(message(command, "get.single", "%p", player.getName(), "%k", UserPaths.FIRST_JOIN, "%v", Users.getUser(player).getLong(UserPaths.FIRST_JOIN) + ""));
-        sender.sendMessage(message(command, "get.single", "%p", player.getName(), "%k", UserPaths.LAST_LEAVE, "%v", Users.getUser(player).getLong(UserPaths.LAST_LEAVE) + ""));
-        sender.sendMessage(list(command, "get.list", config.getStringList(UserPaths.PAST_NAMES), "%p", player.getName(), "%k", UserPaths.PAST_NAMES));
+        sender.sendMessage(message("get.single", "%p", player.getName(), "%k", UserPaths.FIRST_JOIN, "%v", Users.getUser(player).getLong(UserPaths.FIRST_JOIN) + ""));
+        sender.sendMessage(message("get.single", "%p", player.getName(), "%k", UserPaths.LAST_LEAVE, "%v", Users.getUser(player).getLong(UserPaths.LAST_LEAVE) + ""));
+        sender.sendMessage(list("get.list", config.getStringList(UserPaths.PAST_NAMES), "%p", player.getName(), "%k", UserPaths.PAST_NAMES));
         return true;
     }
 
