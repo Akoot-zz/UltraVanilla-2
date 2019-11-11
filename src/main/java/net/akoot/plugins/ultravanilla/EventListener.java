@@ -1,6 +1,6 @@
 package net.akoot.plugins.ultravanilla;
 
-import net.akoot.plugins.ultravanilla.reference.UserPaths;
+import net.akoot.plugins.ultravanilla.reference.UltraPaths;
 import net.akoot.plugins.ultravanilla.serializable.Position;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -35,15 +35,15 @@ public class EventListener implements Listener {
 
         // Set the first-join time if they joined for the first time
         if (!event.getPlayer().hasPlayedBefore()) {
-            config.set(UserPaths.FIRST_JOIN, System.currentTimeMillis());
-            config.set(UserPaths.PAST_NAMES, Collections.singletonList(name));
+            config.set(UltraPaths.User.FIRST_JOIN, System.currentTimeMillis());
+            config.set(UltraPaths.User.PAST_NAMES, Collections.singletonList(name));
         }
 
         // If the user has changed their username, add it to their past-names list
-        List<String> pastNames = config.getStringList(UserPaths.PAST_NAMES);
+        List<String> pastNames = config.getStringList(UltraPaths.User.PAST_NAMES);
         if (!pastNames.contains(name)) {
             pastNames.add(name);
-            config.set(UserPaths.PAST_NAMES, pastNames);
+            config.set(UltraPaths.User.PAST_NAMES, pastNames);
         }
 
         // Save the config
@@ -60,14 +60,14 @@ public class EventListener implements Listener {
         YamlConfiguration config = Users.getUser(player);
 
         // Set the playtime
-        long difference = System.currentTimeMillis() - config.getLong(UserPaths.LAST_LEAVE);
-        config.set(UserPaths.PLAYTIME, config.getLong(UserPaths.PLAYTIME, 0L) + difference);
+        long difference = System.currentTimeMillis() - config.getLong(UltraPaths.User.LAST_LEAVE, System.currentTimeMillis());
+        config.set(UltraPaths.User.PLAYTIME, config.getLong(UltraPaths.User.PLAYTIME, 0L) + difference);
 
         // Set the last-leave time
-        config.set(UserPaths.LAST_LEAVE, System.currentTimeMillis());
+        config.set(UltraPaths.User.LAST_LEAVE, System.currentTimeMillis());
 
         // Set the last position
-        config.set(UserPaths.LAST_POSITION, new Position(player.getLocation()));
+        config.set(UltraPaths.User.LAST_POSITION, new Position(player.getLocation()));
 
         // Register the user config in the Users.users Map
         Users.unregisterUser(player);
