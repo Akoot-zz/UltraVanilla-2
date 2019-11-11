@@ -140,39 +140,64 @@ public class UltraCommand {
         // Create the list of players to return
         List<Player> players = new ArrayList<>();
 
+        // Handle commas
+        if (arg.contains(",")) {
+
+            // Split each username with a comma and for add all valid players to the 'players' list
+            for (String name : arg.split(",")) {
+                players.addAll(getPlayers(name));
+            }
+            return players;
+        }
+
         // Handle @a selector
-        if (arg.equals("@a")) {
+        if (arg.contains("@a")) {
             players.addAll(plugin.getServer().getOnlinePlayers());
+            filterPlayers(arg, players);
         }
 
         // Handle @r selector
-        else if (arg.equalsIgnoreCase("@r")) {
+        if (arg.contains("@r")) {
 
             // Temporarily fill 'players' list with all online players
             players.addAll(plugin.getServer().getOnlinePlayers());
+            filterPlayers(arg, players);
 
             // If there is at least 1 player online, clear 'players' list and add one random player from the list
-            if (players.size() > 0) {
-                Player player = players.get(random.nextInt(players.size()));
+            if (!players.isEmpty()) {
+                Player player = (players.get(random.nextInt(players.size())));
                 players = new ArrayList<>();
                 players.add(player);
             }
         }
 
-        // Handle commas
-        else if (arg.contains(",")) {
+        // Handle multipliers
+        if (arg.contains("*")) {
 
-            // Split each username with a comma and for add all valid players to the 'players' list
-            for (String name : arg.split(",")) {
+            // Compile the regex pattern to handle <name>*<count>
+            Pattern pattern = Pattern.compile("([a-zA-Z0-9_]+)(\\*)([0-9]+)");
+            Matcher m = pattern.matcher(arg);
 
-                // Get the player with the username
-                Player player = plugin.getServer().getPlayer(name);
+            // Create variables to store info gotten from the regular expression
+            String username = "";
+            int count = 0;
 
-                // If the player is online, add them to the 'players' list
+            // Update count and username with the regex groups if found
+            while (m.find()) {
+                username = m.group(1);
+                count = Integer.parseInt(m.group(3));
+            }
+
+            plugin.getServer().broadcastMessage(username + ": " + count);
+
+            // Simply add the same player to the list multiple times
+            for (int i = 0; i < count; i++) {
+                Player player = plugin.getServer().getPlayer(username);
                 if (player != null) {
                     players.add(player);
                 }
             }
+            return players;
         }
 
         // Anything else will be treated as a regular username, will return an empty list if no player was found
@@ -181,8 +206,21 @@ public class UltraCommand {
             if (player != null) {
                 players.add(player);
             }
+            return players;
         }
-        return players;
+    }
+
+    private void filterPlayers(String arg, List<Player> players) {
+        if (arg.contains("!")) {
+            arg = arg.substring(arg.indexOf("!") + 1);
+            for (String name : arg.split("!")) {
+                for (Player player : players) {
+                    if (player.getName().startsWith(name)) {
+                        players.remove(player);
+                    }
+                }
+            }
+        }
     }
 
     /**

@@ -59,6 +59,10 @@ public class EventListener implements Listener {
         // Get the user config
         YamlConfiguration config = Users.getUser(player);
 
+        // Set the playtime
+        long difference = System.currentTimeMillis() - config.getLong(UserPaths.LAST_LEAVE);
+        config.set(UserPaths.PLAYTIME, config.getLong(UserPaths.PLAYTIME, 0L) + difference);
+
         // Set the last-leave time
         config.set(UserPaths.LAST_LEAVE, System.currentTimeMillis());
 
