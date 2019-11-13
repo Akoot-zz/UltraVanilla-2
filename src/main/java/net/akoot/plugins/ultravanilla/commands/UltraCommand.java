@@ -2,6 +2,7 @@ package net.akoot.plugins.ultravanilla.commands;
 
 import net.akoot.plugins.ultravanilla.Strings;
 import net.akoot.plugins.ultravanilla.UltraVanilla;
+import net.akoot.plugins.ultravanilla.reference.UltraPaths;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -364,4 +365,36 @@ public class UltraCommand {
         }
         return realSuggestions;
     }
+
+    /**
+     * Get a string that says the player specified is offline
+     *
+     * @param offlinePlayer The name of player who is offline
+     * @return A message saying a player is offline
+     */
+    protected String playerOffline(String offlinePlayer) {
+        return uvStrings.getString(UltraPaths.Strings.PLAYER_OFFLINE, "%p", offlinePlayer);
+    }
+
+    /**
+     * Get a string that says the player specified is invalid/doesn't exist
+     *
+     * @param invalidPlayer The name of the player who is invalid
+     * @return A message saying a player is invalid
+     */
+    protected String playerInvalid(String invalidPlayer) {
+        return uvStrings.getString(UltraPaths.Strings.PLAYER_NULL, "%p", invalidPlayer);
+    }
+
+    /**
+     * Get a string that says the sender must be a player to perform the specified action
+     *
+     * @param action The action only players can do
+     * @return A string asserting you must be a player to do a certain action
+     */
+    protected String playerOnly(String action) {
+        return uvStrings.getString(UltraPaths.Strings.PLAYER_ONLY, "%a", action);
+    }
+
+
 }
