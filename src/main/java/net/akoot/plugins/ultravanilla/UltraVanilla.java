@@ -30,7 +30,7 @@ public final class UltraVanilla extends JavaPlugin {
         UltraVanilla.instance = this;
 
         // Register serializable classes
-        ConfigurationSerialization.registerClass(Position.class);
+        ConfigurationSerialization.registerClass(Position.class, "Position");
 
         // Create directories
         getDataFolder().mkdir();

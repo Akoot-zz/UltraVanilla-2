@@ -3,11 +3,13 @@ package net.akoot.plugins.ultravanilla.serializable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.SerializableAs;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@SerializableAs("Position")
 public class Position implements ConfigurationSerializable {
 
     private String name;
@@ -16,7 +18,11 @@ public class Position implements ConfigurationSerializable {
     private float yaw, pitch;
 
     public Position(Location location) {
-        this("location",
+        this("location", location);
+    }
+
+    public Position(String name, Location location) {
+        this(name,
                 location.getWorld().getUID(),
                 location.getX(), location.getY(),
                 location.getZ(), location.getPitch(),
@@ -143,5 +149,13 @@ public class Position implements ConfigurationSerializable {
 
     public String toStringTrimmed() {
         return String.format("%s, %s, %s, %s", (int) Math.round(x), (int) Math.round(y), (int) Math.round(z), Bukkit.getWorld(world).getName());
+    }
+
+    public static String toStringTrimmed(Location location) {
+        return String.format("%s, %s, %s, %s",
+                (int) Math.round(location.getX()),
+                (int) Math.round(location.getY()),
+                (int) Math.round(location.getZ()),
+                location.getWorld().getName());
     }
 }
