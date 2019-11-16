@@ -7,6 +7,7 @@ public class UltraPaths {
         public static final String PLAYER_NULL = "error.player-null";
         public static final String PLAYER_OFFLINE = "error.player-offline";
         public static final String PLAYER_ONLY = "error.player-only";
+        public static final String NO_PERMISSION = "error.no-permission";
 
     }
 

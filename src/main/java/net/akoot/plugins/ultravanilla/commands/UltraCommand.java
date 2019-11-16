@@ -396,5 +396,15 @@ public class UltraCommand {
         return uvStrings.getString(UltraPaths.Strings.PLAYER_ONLY, "%a", action);
     }
 
+    /**
+     * Get a string that tells a sender they don't have permission to perform the specified action
+     *
+     * @param action The action the sender doesn't have permission to perform
+     * @return A string asserting you must have permission to perform a certain action
+     */
+    protected String noPermission(String action) {
+        return uvStrings.getString(UltraPaths.Strings.NO_PERMISSION, "%a", action);
+    }
+
 
 }
