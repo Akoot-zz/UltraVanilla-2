@@ -1,5 +1,8 @@
 package net.akoot.plugins.ultravanilla.util;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,5 +54,27 @@ public class RawMessage {
      */
     public void addComponent(RawComponent component) {
         components.add(component);
+    }
+
+    /**
+     * Send the raw message to a player
+     *
+     * @param player The player to send the raw message to
+     */
+    public void send(Player player) {
+        player.getServer().dispatchCommand(Bukkit.getConsoleSender(), String.format("tellraw %s %s", player.getName(), getJSON()));
+    }
+
+    /**
+     * Trim the last component by amount number of characters
+     *
+     * @param amount The number of characters to trim the last component
+     */
+    public void trimLast(int amount) {
+        int i = components.size() - 1;
+        RawComponent component = components.get(i);
+        String content = component.getContent();
+        component.setContent(content.substring(0, content.length() - (amount + 1)));
+        components.set(i, component);
     }
 }

@@ -20,7 +20,7 @@ public class RawComponent {
      * @param content The display text
      */
     public RawComponent(String content) {
-        this.content = content;
+        setContent(content);
     }
 
     /**
@@ -122,7 +122,7 @@ public class RawComponent {
      * @param content The visible text
      */
     public void setContent(String content) {
-        this.content = content;
+        this.content = content.replace("\n", "\\n");
     }
 
     /**
