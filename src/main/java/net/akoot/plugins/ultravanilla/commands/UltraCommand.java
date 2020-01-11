@@ -1,14 +1,15 @@
 package net.akoot.plugins.ultravanilla.commands;
 
 import net.akoot.plugins.ultravanilla.Strings;
+import net.akoot.plugins.ultravanilla.UltraPlugin;
 import net.akoot.plugins.ultravanilla.UltraVanilla;
 import net.akoot.plugins.ultravanilla.reference.UltraPaths;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,25 +17,25 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UltraCommand {
+public class UltraCommand implements CommandExecutor {
 
     public ChatColor color;
-    protected JavaPlugin plugin;
+    protected UltraPlugin plugin;
     protected Random random;
     protected Strings strings;
     protected Strings uvStrings;
     protected Command command;
 
-    public UltraCommand(JavaPlugin plugin, Strings strings, ChatColor color) {
+    public UltraCommand(UltraPlugin plugin, ChatColor color) {
         this.plugin = plugin;
-        this.strings = strings;
+        this.strings = plugin.getStrings();
         this.random = new Random();
         this.color = color;
         this.uvStrings = UltraVanilla.getInstance().getStrings();
     }
 
-    public UltraCommand(JavaPlugin plugin, Strings strings) {
-        this(plugin, strings, ChatColor.WHITE);
+    public UltraCommand(UltraPlugin plugin, Strings strings) {
+        this(plugin, ChatColor.WHITE);
     }
 
     /**
@@ -407,4 +408,8 @@ public class UltraCommand {
     }
 
 
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        return false;
+    }
 }

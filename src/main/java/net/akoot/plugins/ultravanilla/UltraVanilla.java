@@ -2,58 +2,53 @@ package net.akoot.plugins.ultravanilla;
 
 import net.akoot.plugins.ultravanilla.commands.UltravanillaCommand;
 import net.akoot.plugins.ultravanilla.serializable.Position;
-import net.akoot.plugins.ultravanilla.util.IOUtil;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
-public final class UltraVanilla extends JavaPlugin {
+public final class UltraVanilla extends UltraPlugin {
 
     private static UltraVanilla instance;
-    private Strings strings;
+    private Set<UltraPlugin> hooks;
 
-    /**
-     * Get the plugin instance.
-     *
-     * @return The plugin instance
-     */
     public static UltraVanilla getInstance() {
         return instance;
     }
 
-    @Override
-    public void onEnable() {
-
-        // Set the instance for getInstance()
-        UltraVanilla.instance = this;
-
-        // Register serializable classes
-        ConfigurationSerialization.registerClass(Position.class, "Position");
-
-        // Create directories
-        getDataFolder().mkdir();
-        Users.DIR.mkdir();
-
-        // Register strings instance for this plugin
-        strings = new Strings(instance, getClass());
-
-        // Copy defaults from the jar for config.yml if needed
-        IOUtil.copyDefaults(new File(getDataFolder(), "config.yml"), getClass());
-
-        // Register /ultravanilla command
-        getCommand("ultravanilla").setExecutor(new UltravanillaCommand(instance, strings));
-
-        // Register events
-        getServer().getPluginManager().registerEvents(new EventListener(instance), instance);
+    public Set<UltraPlugin> getHooks() {
+        return hooks;
     }
 
-    public Strings getStrings() {
-        return strings;
+    @Override
+    public void start() {
+
+        instance = this;
+
+        // Register serializable classes
+        serialize(Position.class, "Position");
+
+        // Create directories
+        Users.DIR.mkdir();
+
+        // Copy defaults from the jar for config.yml if needed
+        copyDefaults("config.yml");
+
+        // Register /ultravanilla command
+        registerCommand("ultravanilla", new UltravanillaCommand(this));
+
+        // Register events
+        registerEvents(new EventListener(this));
+
+        // Initialize hooks
+        hooks = new HashSet<>();
     }
 
     @Override
     public void onDisable() {
+    }
+
+    public void hook(UltraPlugin plugin) {
+        hooks.add(plugin);
     }
 
 }

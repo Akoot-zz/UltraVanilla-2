@@ -1,12 +1,12 @@
 package net.akoot.plugins.ultravanilla.commands;
 
-import net.akoot.plugins.ultravanilla.Strings;
+import net.akoot.plugins.ultravanilla.UltraPlugin;
+import net.akoot.plugins.ultravanilla.UltraVanilla;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,8 +14,8 @@ import java.util.List;
 
 public class UltravanillaCommand extends UltraCommand implements CommandExecutor, TabExecutor {
 
-    public UltravanillaCommand(JavaPlugin instance, Strings strings) {
-        super(instance, strings, ChatColor.GOLD);
+    public UltravanillaCommand(UltraVanilla instance) {
+        super(instance, ChatColor.GOLD);
     }
 
     @Override
@@ -31,6 +31,9 @@ public class UltravanillaCommand extends UltraCommand implements CommandExecutor
                 if (hasPermission(sender, "reload")) {
                     plugin.reloadConfig();
                     strings.reload();
+                    for (UltraPlugin plugin : UltraVanilla.getInstance().getHooks()) {
+                        plugin.reload();
+                    }
                     sender.sendMessage(message("reload"));
                 } else {
                     sender.sendMessage(strings.getString("error.no-permission", "%a", "reload the configs"));
