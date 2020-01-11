@@ -1,7 +1,6 @@
 package net.akoot.plugins.ultravanilla;
 
 import net.akoot.plugins.ultravanilla.commands.UltravanillaCommand;
-import net.akoot.plugins.ultravanilla.commands.UserCommand;
 import net.akoot.plugins.ultravanilla.serializable.Position;
 import net.akoot.plugins.ultravanilla.util.IOUtil;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -44,9 +43,6 @@ public final class UltraVanilla extends JavaPlugin {
 
         // Register /ultravanilla command
         getCommand("ultravanilla").setExecutor(new UltravanillaCommand(instance, strings));
-
-        // Register /user command
-        getCommand("user").setExecutor(new UserCommand(instance, strings));
 
         // Register events
         getServer().getPluginManager().registerEvents(new EventListener(instance), instance);

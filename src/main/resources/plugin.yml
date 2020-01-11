@@ -15,11 +15,3 @@ commands:
     usage: |
       /ultravanilla
       /ultravanilla reload
-  user:
-    description: View, edit and delete values from a player
-    permission: ultravanilla.command.user
-    usage: |
-      /user set <key> <value>
-      /user delete <key>
-      /user add <value> <key>
-      /user remove <value> <key>
