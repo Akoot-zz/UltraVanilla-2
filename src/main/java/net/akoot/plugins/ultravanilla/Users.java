@@ -17,6 +17,16 @@ public class Users {
     private static Map<UUID, YamlConfiguration> users = new HashMap<>();
 
     /**
+     * Get the user config using their UUID
+     *
+     * @param uuid The player's UUID
+     * @return the YamlConfiguration of the player with that UUID
+     */
+    public static YamlConfiguration getUser(UUID uuid) {
+        return users.get(uuid);
+    }
+
+    /**
      * Registers the player's config to memory
      *
      * @param player The player who's config you wish to save to memory

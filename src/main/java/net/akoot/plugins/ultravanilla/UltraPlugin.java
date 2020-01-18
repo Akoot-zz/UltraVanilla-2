@@ -9,22 +9,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Set;
 
 public class UltraPlugin extends JavaPlugin {
 
-    protected static UltraPlugin instance;
     protected UltraVanilla uv;
     protected Strings strings;
     protected Set<Config> configs;
 
-    public static UltraPlugin getInstance() {
-        return instance;
-    }
-
     @Override
     public void onEnable() {
-        instance = this;
 
         if (!getClass().equals(UltraVanilla.class)) {
             uv = (UltraVanilla) getServer().getPluginManager().getPlugin("UltraVanilla");
@@ -40,6 +35,8 @@ public class UltraPlugin extends JavaPlugin {
         getDataFolder().mkdirs();
 
         strings = new Strings(this, getClass());
+
+        configs = new HashSet<>();
         start();
     }
 
