@@ -288,26 +288,37 @@ public class UltraCommand implements CommandExecutor {
     }
 
     /**
+     * Get whether or not the command has a message
+     *
+     * @param key The key
+     * @return Whether or not the command has a message
+     */
+    protected boolean hasMessage(String key) {
+        return strings.hasCommandKey(command, "message." + key);
+    }
+
+    /**
      * Get a formatted list for the specified command.
      *
-     * @param key     The key
-     * @param values  The items to display as lists
-     * @param format  The global format for this list
+     * @param key    The key
+     * @param values The items to display as lists
+     * @param format The global format for this list
      * @return The formatted list string
      */
     protected String list(String key, List<String> values, String... format) {
 
         String list = "";
-        String title = message(key + ".title", format);
+        String title = hasMessage(key + ".title") ? message(key + ".title", format) : "";
+        String itemKey = key + (hasMessage(key + ".item") ? ".item" : "");
         list += title;
         if (values.isEmpty()) {
             return list + uvStrings.getString("misc.none");
         }
         for (int i = 0; i < values.size(); i++) {
-            String item = message(key + ".item", "%v", values.get(i));
+            String item = message(itemKey, "%v", values.get(i));
             if (i == values.size() - 1) {
-                if (item.endsWith("%, ")) {
-                    item = item.substring(0, item.length() - 3);
+                if (item.contains("%,")) {
+                    item = item.substring(0, item.indexOf("%,"));
                 }
             }
             list += item.replaceAll("%,", ",");

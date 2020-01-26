@@ -8,17 +8,13 @@ misc:
 command:
   ultravanilla:
     message:
-      reload: "All configurations were reloaded!"
-  user:
-    message:
-      set: "Set &@%p &:'&.%k&:' to &:'&.%v&:'"
-      add: "Added '&.%v&:' to &@%p &:'&.%k&:'"
-      remove: "Removed '&.%v&:' from &@%p &:'&.%k&:'"
-      delete: "Deleted &@%p &:'&.%k&:'"
-      get:
-        single: "&:'&.%k&:' is '&.%v&:' for &@%p"
-        list:
-          title: "&:Items in '&.%k&:' for &@%p&::\n"
-          item: "- &.%v\n&:"
-    error:
-      get: "&@%p &:doesn't have a field called '&.%k&:'"
+      reload:
+        all: "All configurations were reloaded!"
+        plugin: "&.%p &:has been reloaded!"
+      changelog:
+        title: "---------- &.%n &#%v &:----------"
+        fixed: "&e* Fixed &:%v\n"
+        added: "&a+ Added &:%v\n"
+        removed: "&c- Removed &:%v\n"
+        changed: "&6^ Changed &:%v\n"
+        broke: "&4# Broke &:%v\n"

@@ -55,6 +55,27 @@ public class Strings extends Config {
     }
 
     /**
+     * Get whether or not the key has a value
+     *
+     * @param key The key
+     * @return Whether or not the key has a value
+     */
+    public boolean hasKey(String key) {
+        return config.getString(key) != null;
+    }
+
+    /**
+     * Get whether or not the key has a value
+     *
+     * @param command The command
+     * @param key     The key
+     * @return Whether or not the key has a value
+     */
+    public boolean hasCommandKey(Command command, String key) {
+        return config.getString(getCommandKey(command, key)) != null;
+    }
+
+    /**
      * Get a non-formatted string from config.yml in the 'command' section.
      *
      * @param command The command
@@ -62,7 +83,18 @@ public class Strings extends Config {
      * @return The string
      */
     public String getCommandString(Command command, String key) {
-        return config.getString("command." + command.getName() + "." + key);
+        return config.getString(getCommandKey(command, key));
+    }
+
+    /**
+     * Get the key of a command with prefix command.(command).(key)
+     *
+     * @param command The command
+     * @param key     The key inside the command key root
+     * @return The key: command.(command).(key)
+     */
+    public String getCommandKey(Command command, String key) {
+        return "command." + command.getName() + "." + key;
     }
 
     /**

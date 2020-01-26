@@ -16,27 +16,38 @@ public class UltraPlugin extends JavaPlugin {
 
     protected UltraVanilla uv;
     protected Strings strings;
+
+    private Config changelog;
+
+    public Config getChangelog() {
+        return changelog;
+    }
+
     protected Set<Config> configs;
 
     @Override
     public void onEnable() {
 
-        if (!getClass().equals(UltraVanilla.class)) {
-            uv = (UltraVanilla) getServer().getPluginManager().getPlugin("UltraVanilla");
-            if (uv != null) {
-                getLogger().info("Hooked to " + uv.getDescription().getFullName() + "!");
-                uv.hook(this);
-            } else {
-                getLogger().severe("Could not hook to UltraVanilla jar, disabling.");
-                getServer().getPluginManager().disablePlugin(this);
-            }
+        uv = getClass().equals(UltraVanilla.class) ? (UltraVanilla) this : (UltraVanilla) getServer().getPluginManager().getPlugin("UltraVanilla");
+        if (uv != null) {
+            getLogger().info("Hooked to " + uv.getDescription().getFullName());
+            UltraVanilla.hook(this);
+        } else {
+            getLogger().severe("Could not hook to UltraVanilla, disabling.");
+            getServer().getPluginManager().disablePlugin(this);
         }
 
         getDataFolder().mkdirs();
 
         strings = new Strings(this, getClass());
+        changelog = new Config(this, getClass(), "changelog.yml");
+
+        copyDefaults("changelog.yml", true);
 
         configs = new HashSet<>();
+
+        registerConfig(changelog);
+
         start();
     }
 
@@ -74,7 +85,11 @@ public class UltraPlugin extends JavaPlugin {
         return strings;
     }
 
+    protected void copyDefaults(String file, boolean overwrite) {
+        IOUtil.copyDefaults(new File(getDataFolder(), file), getClass(), overwrite);
+    }
+
     protected void copyDefaults(String file) {
-        IOUtil.copyDefaults(new File(getDataFolder(), file), getClass());
+        copyDefaults(file, false);
     }
 }

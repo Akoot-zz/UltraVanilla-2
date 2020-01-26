@@ -18,6 +18,7 @@ public class UltraPaths {
         public static final String FIRST_JOIN = "info.first-join";
         public static final String PLAYTIME = "info.playtime";
         public static final String LAST_POSITION = "info.last-position";
+        public static final String LAST_VERSION = "info.last-version";
 
     }
 }

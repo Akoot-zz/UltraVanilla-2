@@ -46,6 +46,16 @@ public class EventListener implements Listener {
             config.set(UltraPaths.User.PAST_NAMES, pastNames);
         }
 
+        // Set the last version of each hook
+        for (UltraPlugin hook : UltraVanilla.getHooks()) {
+            String lastVersionPath = UltraPaths.User.LAST_VERSION + "." + hook.getDescription().getName();
+            String currentVersion = hook.getDescription().getVersion();
+            if (!config.get(lastVersionPath, "").equals(currentVersion)) {
+                player.performCommand("uv changelog " + hook.getDescription().getName().toLowerCase());
+                config.set(UltraPaths.User.LAST_VERSION + "." + hook.getDescription().getName(), hook.getDescription().getVersion());
+            }
+        }
+
         // Save the config
         Users.saveUser(player);
     }

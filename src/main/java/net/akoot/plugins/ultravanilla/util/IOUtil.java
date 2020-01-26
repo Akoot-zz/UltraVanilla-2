@@ -14,11 +14,25 @@ public class IOUtil {
      * @param root A class to be used for reference
      */
     public static void copyDefaults(File file, Class root) {
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
+        copyDefaults(file, root, false);
+    }
+
+    /**
+     * If the file doesn't exist, copy the original file in the .jar into the new file.
+     *
+     * @param file      The file to check
+     * @param root      A class to be used for reference
+     * @param overwrite Whether or not to overwrite overwrite
+     */
+    public static void copyDefaults(File file, Class root, boolean overwrite) {
+        boolean exists = file.exists();
+        if (overwrite || !exists) {
+            if (!exists) {
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             InputStream fis = root.getResourceAsStream("/" + file.getName());
             FileOutputStream fos = null;

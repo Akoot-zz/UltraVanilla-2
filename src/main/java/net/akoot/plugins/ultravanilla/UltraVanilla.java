@@ -9,20 +9,37 @@ import java.util.Set;
 public final class UltraVanilla extends UltraPlugin {
 
     private static UltraVanilla instance;
-    private Set<UltraPlugin> hooks;
+    private static Set<UltraPlugin> hooks = new HashSet<>();
 
     public static UltraVanilla getInstance() {
         return instance;
     }
 
-    public Set<UltraPlugin> getHooks() {
+    public static Set<UltraPlugin> getHooks() {
         return hooks;
+    }
+
+    public static void hook(UltraPlugin plugin) {
+        hooks.add(plugin);
+    }
+
+    public static UltraPlugin getHook(String name) {
+        for (UltraPlugin hook : hooks) {
+            if (hook.getDescription().getName().equalsIgnoreCase(name)) {
+                return hook;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void onDisable() {
     }
 
     @Override
     public void start() {
 
-        instance = this;
+        instance = uv;
 
         // Register serializable classes
         serialize(Position.class, "Position");
@@ -38,17 +55,6 @@ public final class UltraVanilla extends UltraPlugin {
 
         // Register events
         registerEvents(new EventListener(this));
-
-        // Initialize hooks
-        hooks = new HashSet<>();
-    }
-
-    @Override
-    public void onDisable() {
-    }
-
-    public void hook(UltraPlugin plugin) {
-        hooks.add(plugin);
     }
 
 }
