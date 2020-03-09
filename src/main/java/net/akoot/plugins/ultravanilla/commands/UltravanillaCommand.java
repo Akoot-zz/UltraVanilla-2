@@ -30,8 +30,8 @@ public class UltravanillaCommand extends UltraCommand implements CommandExecutor
             if (args[0].equalsIgnoreCase("reload")) {
                 color = ChatColor.GREEN;
                 if (hasPermission(sender, "reload")) {
-                    for (UltraPlugin plugin : UltraVanilla.getHooks()) {
-                        plugin.reload();
+                    for (UltraPlugin hook : UltraVanilla.getHooks()) {
+                        hook.reload();
                     }
                     sender.sendMessage(message("reload.all"));
                 } else {
@@ -39,8 +39,8 @@ public class UltravanillaCommand extends UltraCommand implements CommandExecutor
                 }
             } else if (args[0].equalsIgnoreCase("changelog")) {
                 color = ChatColor.GRAY;
-                for (UltraPlugin plugin : UltraVanilla.getHooks()) {
-                    sendChangelogForPlugin(sender, plugin);
+                for (UltraPlugin hook : UltraVanilla.getHooks()) {
+                    sendChangelogForPlugin(sender, hook);
                 }
             } else {
                 return false;
@@ -62,9 +62,9 @@ public class UltravanillaCommand extends UltraCommand implements CommandExecutor
                 }
             } else if (args[0].equalsIgnoreCase("changelog")) {
                 color = ChatColor.GRAY;
-                UltraPlugin ultraPlugin = UltraVanilla.getHook(args[1]);
-                if (ultraPlugin != null) {
-                    sendChangelogForPlugin(sender, ultraPlugin);
+                UltraPlugin hook = UltraVanilla.getHook(args[1]);
+                if (hook != null) {
+                    sendChangelogForPlugin(sender, hook);
                 } else {
                     sender.sendMessage(error("plugin-invalid", "%p", args[1]));
                 }
@@ -74,9 +74,9 @@ public class UltravanillaCommand extends UltraCommand implements CommandExecutor
         return true;
     }
 
-    private void sendChangelogForPlugin(CommandSender sender, UltraPlugin plugin) {
-        Config changelog = plugin.getChangelog();
-        String title = message("changelog.title", "%n", plugin.getDescription().getName(), "%v", plugin.getDescription().getVersion());
+    private void sendChangelogForPlugin(CommandSender sender, UltraPlugin ultraPlugin) {
+        Config changelog = ultraPlugin.getChangelog();
+        String title = message("changelog.title", "%n", ultraPlugin.getDescription().getName(), "%v", ultraPlugin.getDescription().getVersion());
 
         sender.sendMessage(title);
 

@@ -42,7 +42,7 @@ public class UltraPlugin extends JavaPlugin {
         strings = new Strings(this, getClass());
         changelog = new Config(this, getClass(), "changelog.yml");
 
-        copyDefaults("changelog.yml", true);
+        copyDefaults("changelog.yml");
 
         configs = new HashSet<>();
 
@@ -85,11 +85,7 @@ public class UltraPlugin extends JavaPlugin {
         return strings;
     }
 
-    protected void copyDefaults(String file, boolean overwrite) {
-        IOUtil.copyDefaults(new File(getDataFolder(), file), getClass(), overwrite);
-    }
-
     protected void copyDefaults(String file) {
-        copyDefaults(file, false);
+        IOUtil.copyDefaults(new File(getDataFolder(), file), getClass(), true);
     }
 }

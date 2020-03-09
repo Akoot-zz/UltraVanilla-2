@@ -1,7 +1,6 @@
 package net.akoot.plugins.ultravanilla;
 
 import net.akoot.plugins.ultravanilla.reference.UltraPaths;
-import net.akoot.plugins.ultravanilla.serializable.Position;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,7 +34,7 @@ public class EventListener implements Listener {
 
         // Set the first-join time if they joined for the first time
         if (!event.getPlayer().hasPlayedBefore()) {
-            config.set(UltraPaths.User.FIRST_JOIN, System.currentTimeMillis());
+            config.set(UltraPaths.User.FIRST_LOGIN, System.currentTimeMillis());
             config.set(UltraPaths.User.PAST_NAMES, Collections.singletonList(name));
         }
 
@@ -70,14 +69,11 @@ public class EventListener implements Listener {
         YamlConfiguration config = Users.getUser(player);
 
         // Set the playtime
-        long difference = System.currentTimeMillis() - config.getLong(UltraPaths.User.LAST_LEAVE, System.currentTimeMillis());
+        long difference = player.getLastSeen() - player.getLastLogin();
         config.set(UltraPaths.User.PLAYTIME, config.getLong(UltraPaths.User.PLAYTIME, 0L) + difference);
 
-        // Set the last-leave time
-        config.set(UltraPaths.User.LAST_LEAVE, System.currentTimeMillis());
-
         // Set the last position
-        config.set(UltraPaths.User.LAST_POSITION, new Position(player.getLocation()));
+        config.set(UltraPaths.User.LAST_LOCATION, player.getLocation());
 
         // Register the user config in the Users.users Map
         Users.unregisterUser(player);

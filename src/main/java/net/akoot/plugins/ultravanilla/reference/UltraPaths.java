@@ -14,10 +14,9 @@ public class UltraPaths {
     public static class User {
 
         public static final String PAST_NAMES = "info.past-names";
-        public static final String LAST_LEAVE = "info.last-leave";
-        public static final String FIRST_JOIN = "info.first-join";
+        public static final String FIRST_LOGIN = "info.first-login";
         public static final String PLAYTIME = "info.playtime";
-        public static final String LAST_POSITION = "info.last-position";
+        public static final String LAST_LOCATION = "info.last-position";
         public static final String LAST_VERSION = "info.last-version";
 
     }

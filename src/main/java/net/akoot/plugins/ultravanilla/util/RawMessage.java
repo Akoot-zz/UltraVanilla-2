@@ -72,6 +72,11 @@ public class RawMessage {
      */
     public void trimLast(int amount) {
         int i = components.size() - 1;
+
+        if (i < 0) {
+            return;
+        }
+
         RawComponent component = components.get(i);
         String content = component.getContent();
         component.setContent(content.substring(0, content.length() - (amount + 1)));

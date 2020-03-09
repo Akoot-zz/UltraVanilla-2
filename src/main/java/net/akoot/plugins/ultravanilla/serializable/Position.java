@@ -18,7 +18,7 @@ public class Position implements ConfigurationSerializable {
     private float yaw, pitch;
 
     public Position(Location location) {
-        this("location", location);
+        this(null, location);
     }
 
     public Position(String name, Location location) {
@@ -40,7 +40,8 @@ public class Position implements ConfigurationSerializable {
     }
 
     public static Position deserialize(Map<String, Object> args) {
-        return new Position((String) args.get("name"),
+        return new Position(
+                args.containsKey("name") ? (String) args.get("name") : null,
                 UUID.fromString((String) args.get("world")),
                 (double) args.get("x"),
                 (double) args.get("y"),
