@@ -1,5 +1,7 @@
 package net.akoot.plugins.ultravanilla;
 
+import net.akoot.plugins.ultravanilla.serializable.Position;
+import net.akoot.plugins.ultravanilla.serializable.PositionLite;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -137,5 +139,13 @@ public class Users {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static PositionLite getPositionLite(OfflinePlayer player, String key) {
+        return (PositionLite) getUser(player).get(key);
+    }
+
+    public static Position getPosition(OfflinePlayer player, String key) {
+        return (Position) getUser(player).get(key);
     }
 }

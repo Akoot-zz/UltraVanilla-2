@@ -1,8 +1,11 @@
 package net.akoot.plugins.ultravanilla;
 
 import net.akoot.plugins.ultravanilla.reference.Palette;
+import net.akoot.plugins.ultravanilla.util.StringUtil;
 import org.bukkit.command.Command;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
 
 public class Strings extends Config {
 
@@ -44,7 +47,13 @@ public class Strings extends Config {
      * @return The formatted string
      */
     public String getFormattedString(String key, String... format) {
-        String string = config.getString(key);
+        Object value = config.get(key);
+        String string;
+        if (value instanceof ArrayList) {
+            string = StringUtil.pickRandom((ArrayList<String>) value);
+        } else {
+            string = config.getString(key);
+        }
         if (string != null) {
             for (int i = 0; i < format.length; i += 2) {
                 string = string.replace(format[i], format[i + 1]);
