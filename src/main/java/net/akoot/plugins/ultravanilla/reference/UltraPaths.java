@@ -9,6 +9,10 @@ public class UltraPaths {
         public static final String PLAYER_ONLY = "error.player-only";
         public static final String NO_PERMISSION = "error.no-permission";
 
+        public static final String WORLD_WORLD = "worlds.world";
+        public static final String WORLD_NETHER = "worlds.world_nether";
+        public static final String WORLD_THE_END = "worlds.world_the_end";
+
     }
 
     public static class User {

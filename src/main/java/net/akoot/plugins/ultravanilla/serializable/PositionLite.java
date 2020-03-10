@@ -1,5 +1,8 @@
 package net.akoot.plugins.ultravanilla.serializable;
 
+import net.akoot.plugins.ultravanilla.UltraVanilla;
+import net.akoot.plugins.ultravanilla.reference.Palette;
+import net.akoot.plugins.ultravanilla.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -59,15 +62,7 @@ public class PositionLite implements ConfigurationSerializable {
     }
 
     public PositionLite(Location location) {
-        this(
-                null,
-                (int) Math.floor(location.getX()),
-                (int) Math.floor(location.getY()),
-                (int) Math.floor(location.getZ()),
-                location.getYaw(),
-                location.getPitch(),
-                location.getWorld().getName()
-        );
+        this(null, location);
     }
 
     public PositionLite(int x, int y, int z, double yaw, double pitch) {
@@ -80,6 +75,18 @@ public class PositionLite implements ConfigurationSerializable {
 
     public PositionLite(int x, int y, int z, String name, String world) {
         this(name, x, y, z, 0, 0, world);
+    }
+
+    public PositionLite(String name, Location location) {
+        this(
+                name,
+                (int) Math.floor(location.getX()),
+                (int) Math.floor(location.getY()),
+                (int) Math.floor(location.getZ()),
+                location.getYaw(),
+                location.getPitch(),
+                location.getWorld().getName()
+        );
     }
 
     public static PositionLite deserialize(Map<String, Object> map) {
@@ -182,9 +189,32 @@ public class PositionLite implements ConfigurationSerializable {
 
     @Override
     public String toString() {
-        return String.format("%s%d, %d, %d, %s",
+        return String.format("%s%d, %d, %d%s",
                 name != null ? name + ": " : "",
                 x, y, z,
-                world);
+                getOtherWorldName());
+    }
+
+    private String getOtherWorldName() {
+        return !world.equals("world") ? ", " + world : "";
+    }
+
+    private String getWorldStringColored() {
+        return UltraVanilla.getInstance().getStrings().getString("worlds." + world);
+    }
+
+    public String toString(String format) {
+        format = StringUtil.replaceIf(format, "name", name != null);
+        format = StringUtil.replaceIf(format, "world", !world.equals("world"));
+        format = StringUtil.replaceIf(format, "yawpitch", !(yaw == 0 && pitch == 0));
+        return Palette.translate(format
+                .replaceAll("%x", x + "")
+                .replaceAll("%yaw", yaw + "")
+                .replaceAll("%y", y + "")
+                .replaceAll("%z", z + "")
+                .replaceAll("%pitch", pitch + "")
+                .replaceAll("%world_colored", getWorldStringColored())
+                .replaceAll("%world", world)
+                .replaceAll("%name", name != null ? name : ""));
     }
 }

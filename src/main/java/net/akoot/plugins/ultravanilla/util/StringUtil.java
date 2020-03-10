@@ -1,6 +1,8 @@
 package net.akoot.plugins.ultravanilla.util;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringUtil {
 
@@ -22,5 +24,18 @@ public class StringUtil {
      */
     public static String pickRandom(List<String> strings) {
         return strings.get((int) (Math.random() * strings.size()));
+    }
+
+    public static String replaceIf(String string, String word, boolean replace) {
+
+        String regex = "%\\?" + word + "\\{(.[^}]+)}";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(string);
+        String replacement = "";
+        if (matcher.find() && replace) {
+            replacement = matcher.group(1);
+        }
+        return string.replaceAll(regex, replacement);
     }
 }

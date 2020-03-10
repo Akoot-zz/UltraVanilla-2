@@ -1,3 +1,7 @@
+worlds:
+  world: "&aOverworld"
+  world_the_end: "&dThe End"
+  world_nether: "&cThe Nether"
 error:
   no-permission: "&xYou do not have permission to &w&>%a&x."
   player-only: "&xYou must be a player in order to &w&>%a&x."

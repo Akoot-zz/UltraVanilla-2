@@ -74,6 +74,7 @@ public class UltraPlugin extends JavaPlugin {
     }
 
     public void reload() {
+        getDataFolder().mkdirs();
         strings.reload();
         for (Config config : configs) {
             config.reload();
