@@ -1,6 +1,7 @@
 package net.akoot.plugins.ultravanilla;
 
 import net.akoot.plugins.ultravanilla.reference.UltraPaths;
+import net.akoot.plugins.ultravanilla.serializable.PositionLite;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -73,7 +74,7 @@ public class EventListener implements Listener {
         config.set(UltraPaths.User.PLAYTIME, config.getLong(UltraPaths.User.PLAYTIME, 0L) + difference);
 
         // Set the last position
-        config.set(UltraPaths.User.LAST_LOCATION, player.getLocation());
+        config.set(UltraPaths.User.LAST_LOCATION, new PositionLite(player.getLocation()));
 
         // Register the user config in the Users.users Map
         Users.unregisterUser(player);

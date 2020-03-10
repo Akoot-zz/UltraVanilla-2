@@ -2,6 +2,7 @@ package net.akoot.plugins.ultravanilla;
 
 import net.akoot.plugins.ultravanilla.commands.UltravanillaCommand;
 import net.akoot.plugins.ultravanilla.serializable.Position;
+import net.akoot.plugins.ultravanilla.serializable.PositionLite;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -43,6 +44,7 @@ public final class UltraVanilla extends UltraPlugin {
 
         // Register serializable classes
         serialize(Position.class, "Position");
+        serialize(PositionLite.class, "Pos");
 
         // Create directories
         Users.DIR.mkdir();
