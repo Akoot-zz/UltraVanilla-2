@@ -51,7 +51,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
-                    <outputDirectory>src/test/resources/server/plugins</outputDirectory>
+                    <outputDirectory>src/test/server/plugins</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
@@ -80,6 +80,11 @@
             <artifactId>paper-api</artifactId>
             <version>1.15.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20190722</version>
         </dependency>
     </dependencies>
 </project>

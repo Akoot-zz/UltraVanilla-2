@@ -23,8 +23,14 @@ public class UltravanillaCommand extends UltraCommand implements CommandExecutor
 
         this.command = command;
 
+        // Sub-commands: none
+        if (args.length == 0) {
+            sender.sendMessage(message("no-args.version", "%v", plugin.getDescription().getVersion()));
+            sender.sendMessage(list("no-args.modules", UltraVanilla.getHookNames()));
+        }
+
         // Sub-commands: reload
-        if (args.length == 1) {
+        else if (args.length == 1) {
 
             // reload
             if (args[0].equalsIgnoreCase("reload")) {
@@ -35,7 +41,7 @@ public class UltravanillaCommand extends UltraCommand implements CommandExecutor
                     }
                     sender.sendMessage(message("reload.all"));
                 } else {
-                    sender.sendMessage(strings.getString("error.no-permission", "%a", "reload the configs"));
+                    sender.sendMessage(strings.getFormattedMessage("error.no-permission", "%a", "reload the configs"));
                 }
             } else if (args[0].equalsIgnoreCase("changelog")) {
                 color = ChatColor.GRAY;

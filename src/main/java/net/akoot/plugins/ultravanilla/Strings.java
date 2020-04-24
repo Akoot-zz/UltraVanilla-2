@@ -5,12 +5,26 @@ import net.akoot.plugins.ultravanilla.util.StringUtil;
 import org.bukkit.command.Command;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Strings extends Config {
+public class Strings {
+
+    private static final String COMMANDS_PATH = "strings/commands";
+    private final List<Config> commandConfigs;
+    private final Config messages;
+    private final Config variables;
 
     public Strings(JavaPlugin plugin, Class root) {
-        super(plugin, root, "strings.yml");
+        File commandsFolder = new File(plugin.getDataFolder(), COMMANDS_PATH);
+        commandsFolder.mkdirs();
+        messages = new Config(plugin, root, "strings/messages.yml", "messages");
+        variables = new Config(plugin, root, "strings/variables.yml", "variables");
+        commandConfigs = new ArrayList<>();
+        for (String name : plugin.getDescription().getCommands().keySet()) {
+            commandConfigs.add(new Config(plugin, root, COMMANDS_PATH + "/" + name + ".yml", name));
+        }
     }
 
     /**
@@ -21,18 +35,32 @@ public class Strings extends Config {
      * @param format The placeholder(s) and replacement(s)
      * @return The formatted string
      */
-    public String getString(String key, String... format) {
-        return getFormattedString(key, format);
+    public String getFormattedMessage(String key, String... format) {
+        return getFormattedString(messages, key, format);
     }
 
     /**
-     * Get a non-formatted string from config.yml in the 'strings' section.
+     * Get a non-formatted string from strings/variables.yml.
+     *
+     * @param key The key
+     * @return The string
+     */
+    public String getVariable(String key) {
+        String string = variables.getConfig().getString(key);
+        if (string != null) {
+            return Palette.translate(string);
+        }
+        return key;
+    }
+
+    /**
+     * Get a non-formatted string from strings/messages.yml.
      *
      * @param key The name of the key after 'strings.'
      * @return The string
      */
-    public String getString(String key) {
-        String string = config.getString(key);
+    public String getMessage(String key) {
+        String string = messages.getConfig().getString(key);
         if (string != null) {
             return Palette.translate(string);
         }
@@ -42,17 +70,18 @@ public class Strings extends Config {
     /**
      * Get a formatted string from config.yml replacing the placeholder(s) with the value(s) specified.
      *
+     * @param config The config
      * @param key    The name of the key
      * @param format The placeholder(s) and replacement(s)
      * @return The formatted string
      */
-    public String getFormattedString(String key, String... format) {
-        Object value = config.get(key);
+    public String getFormattedString(Config config, String key, String... format) {
+        Object value = config.getConfig().get(key);
         String string;
         if (value instanceof ArrayList) {
             string = StringUtil.pickRandom((ArrayList<String>) value);
         } else {
-            string = config.getString(key);
+            string = config.getConfig().getString(key);
         }
         if (string != null) {
             for (int i = 0; i < format.length; i += 2) {
@@ -64,27 +93,6 @@ public class Strings extends Config {
     }
 
     /**
-     * Get whether or not the key has a value
-     *
-     * @param key The key
-     * @return Whether or not the key has a value
-     */
-    public boolean hasKey(String key) {
-        return config.getString(key) != null;
-    }
-
-    /**
-     * Get whether or not the key has a value
-     *
-     * @param command The command
-     * @param key     The key
-     * @return Whether or not the key has a value
-     */
-    public boolean hasCommandKey(Command command, String key) {
-        return config.getString(getCommandKey(command, key)) != null;
-    }
-
-    /**
      * Get a non-formatted string from config.yml in the 'command' section.
      *
      * @param command The command
@@ -92,18 +100,7 @@ public class Strings extends Config {
      * @return The string
      */
     public String getCommandString(Command command, String key) {
-        return config.getString(getCommandKey(command, key));
-    }
-
-    /**
-     * Get the key of a command with prefix command.(command).(key)
-     *
-     * @param command The command
-     * @param key     The key inside the command key root
-     * @return The key: command.(command).(key)
-     */
-    public String getCommandKey(Command command, String key) {
-        return "command." + command.getName() + "." + key;
+        return getCommandConfig(command).getConfig().getString(key);
     }
 
     /**
@@ -115,6 +112,43 @@ public class Strings extends Config {
      * @return The formatted String
      */
     public String getFormattedCommandString(Command command, String key, String... format) {
-        return getFormattedString("command." + command.getName() + "." + key, format);
+        return getFormattedString(getCommandConfig(command), key, format);
+    }
+
+    /**
+     * Get the corresponding config for the command.
+     *
+     * @param command The command
+     * @return The corresponding config for the command
+     */
+    public Config getCommandConfig(Command command) {
+        for (Config config : commandConfigs) {
+            if (config.getId().equals(command.getName())) {
+                return config;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get whether or not the command config has a certain key (i.e. somecommand.yml contains key "somekey"?)
+     *
+     * @param command The command
+     * @param key     The key
+     * @return Whether or not the command config has a certain key
+     */
+    public boolean hasCommandKey(Command command, String key) {
+        return getCommandConfig(command).getConfig().contains(key);
+    }
+
+    /**
+     * Reload all of the configs containing strings
+     */
+    public void reload() {
+        for (Config config : commandConfigs) {
+            config.reload();
+        }
+        messages.reload();
+        variables.reload();
     }
 }

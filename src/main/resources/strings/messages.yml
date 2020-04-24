@@ -1,0 +1,5 @@
+error:
+  no-permission: "&xYou do not have permission to &w&>%a&x."
+  player-only: "&xYou must be a player in order to &w&>%a&x."
+  player-null: "&xPlayer &w%p&x was never online!"
+  player-offline: "&xPlayer &w%p&x is not online!"

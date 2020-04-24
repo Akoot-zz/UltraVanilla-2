@@ -199,7 +199,6 @@ public class UltraCommand implements CommandExecutor {
                     players.add(player);
                 }
             }
-            return players;
         }
 
         // Anything else will be treated as a regular username, will return an empty list if no player was found
@@ -208,8 +207,8 @@ public class UltraCommand implements CommandExecutor {
             if (player != null) {
                 players.add(player);
             }
-            return players;
         }
+        return players;
     }
 
     private void filterPlayers(String arg, List<Player> players) {
@@ -256,7 +255,7 @@ public class UltraCommand implements CommandExecutor {
      * @return The formatted string
      */
     protected String message(String key, String... format) {
-        return format("message." + key, format);
+        return format("messages." + key, format);
     }
 
     /**
@@ -282,7 +281,7 @@ public class UltraCommand implements CommandExecutor {
         try {
             return Integer.parseInt(arg);
         } catch (NumberFormatException e) {
-            sender.sendMessage(strings.getString("not-a-number", "{number}", arg));
+            sender.sendMessage(strings.getFormattedMessage("error.not-a-number", "{number}", arg));
             return -1;
         }
     }
@@ -294,7 +293,7 @@ public class UltraCommand implements CommandExecutor {
      * @return Whether or not the command has a message
      */
     protected boolean hasMessage(String key) {
-        return strings.hasCommandKey(command, "message." + key);
+        return strings.hasCommandKey(command, "messages." + key);
     }
 
     /**
@@ -309,21 +308,22 @@ public class UltraCommand implements CommandExecutor {
 
         String list = "";
         String title = hasMessage(key + ".title") ? message(key + ".title", format) : "";
+        String after = hasMessage(key + ".after") ? message(key + ".after", format) : "";
         String itemKey = key + (hasMessage(key + ".item") ? ".item" : "");
         list += title;
         if (values.isEmpty()) {
-            return list + uvStrings.getString("misc.none");
+            return list + uvStrings.getVariable("misc.none");
         }
         for (int i = 0; i < values.size(); i++) {
             String item = message(itemKey, "%v", values.get(i));
             if (i == values.size() - 1) {
-                if (item.contains("%,")) {
-                    item = item.substring(0, item.indexOf("%,"));
+                if (item.contains("%$")) {
+                    item = item.substring(0, item.indexOf("%$"));
                 }
             }
             list += item.replaceAll("%,", ",");
         }
-        return list;
+        return list + after;
     }
 
     /**
@@ -385,7 +385,7 @@ public class UltraCommand implements CommandExecutor {
      * @return A message saying a player is offline
      */
     protected String playerOffline(String offlinePlayer) {
-        return uvStrings.getString(UltraPaths.Strings.PLAYER_OFFLINE, "%p", offlinePlayer);
+        return uvStrings.getFormattedMessage(UltraPaths.Strings.PLAYER_OFFLINE, "%p", offlinePlayer);
     }
 
     /**
@@ -395,7 +395,7 @@ public class UltraCommand implements CommandExecutor {
      * @return A message saying a player is invalid
      */
     protected String playerInvalid(String invalidPlayer) {
-        return uvStrings.getString(UltraPaths.Strings.PLAYER_NULL, "%p", invalidPlayer);
+        return uvStrings.getFormattedMessage(UltraPaths.Strings.PLAYER_NULL, "%p", invalidPlayer);
     }
 
     /**
@@ -405,7 +405,7 @@ public class UltraCommand implements CommandExecutor {
      * @return A string asserting you must be a player to do a certain action
      */
     protected String playerOnly(String action) {
-        return uvStrings.getString(UltraPaths.Strings.PLAYER_ONLY, "%a", action);
+        return uvStrings.getFormattedMessage(UltraPaths.Strings.PLAYER_ONLY, "%a", action);
     }
 
     /**
@@ -415,7 +415,7 @@ public class UltraCommand implements CommandExecutor {
      * @return A string asserting you must have permission to perform a certain action
      */
     protected String noPermission(String action) {
-        return uvStrings.getString(UltraPaths.Strings.NO_PERMISSION, "%a", action);
+        return uvStrings.getFormattedMessage(UltraPaths.Strings.NO_PERMISSION, "%a", action);
     }
 
 

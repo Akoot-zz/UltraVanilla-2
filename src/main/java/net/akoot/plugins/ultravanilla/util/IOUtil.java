@@ -10,21 +10,24 @@ public class IOUtil {
     /**
      * If the file doesn't exist, copy the original file in the .jar into the new file.
      *
-     * @param file The file to check
-     * @param root A class to be used for reference
+     * @param dataFolder The plugin's data folder
+     * @param path       The file to check
+     * @param root       A class to be used for reference
      */
-    public static void copyDefaults(File file, Class root) {
-        copyDefaults(file, root, false);
+    public static void copyDefaults(File dataFolder, String path, Class root) {
+        copyDefaults(dataFolder, path, root, false);
     }
 
     /**
      * If the file doesn't exist, copy the original file in the .jar into the new file.
      *
-     * @param file      The file to check
-     * @param root      A class to be used for reference
-     * @param overwrite Whether or not to overwrite overwrite
+     * @param dataFolder The plugin's data folder
+     * @param path       The file to check
+     * @param root       A class to be used for reference
+     * @param overwrite  Whether or not to overwrite overwrite
      */
-    public static void copyDefaults(File file, Class root, boolean overwrite) {
+    public static void copyDefaults(File dataFolder, String path, Class root, boolean overwrite) {
+        File file = new File(dataFolder, path);
         boolean exists = file.exists();
         if (overwrite || !exists) {
             if (!exists) {
@@ -34,7 +37,7 @@ public class IOUtil {
                     e.printStackTrace();
                 }
             }
-            InputStream fis = root.getResourceAsStream("/" + file.getName());
+            InputStream fis = root.getResourceAsStream("/" + path);
             FileOutputStream fos = null;
             try {
                 fos = new FileOutputStream(file);

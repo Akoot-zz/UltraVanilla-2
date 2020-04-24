@@ -10,11 +10,14 @@ import java.io.IOException;
 
 public class Config {
 
+    protected String path;
     protected YamlConfiguration config;
+    protected String id;
     protected File file;
     protected Class root;
+    private JavaPlugin plugin;
 
-    public Config(JavaPlugin plugin, Class root, String path) {
+    public Config(JavaPlugin plugin, Class root, String path, String id) {
 
         // Set the root class to search for internal jar files
         this.root = root;
@@ -22,14 +25,28 @@ public class Config {
         // Create a YamlConfiguration instance
         config = new YamlConfiguration();
 
-        // Create a stringsFile reference
+        // Set the path
+        this.path = path;
+
+        // Create a strings File reference
         file = new File(plugin.getDataFolder(), path);
 
-        // Copy defaults from the jar for strings.yml if needed
-        IOUtil.copyDefaults(file, root);
+        // Set the id
+        this.id = id;
+
+        // Copy defaults from the jar if needed
+        IOUtil.copyDefaults(plugin.getDataFolder(), path, root);
 
         // Load the configuration from file
         reload();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
@@ -47,7 +64,7 @@ public class Config {
     public void reload() {
         try {
             if (!file.exists()) {
-                IOUtil.copyDefaults(file, root);
+                IOUtil.copyDefaults(plugin.getDataFolder(), path, root);
             }
             config.load(file);
         } catch (IOException | InvalidConfigurationException e) {
@@ -64,5 +81,15 @@ public class Config {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Checks if the configuration contains the specified key.
+     *
+     * @param key The key to search for
+     * @return Whether or not the configuration has the specified key
+     */
+    public boolean hasKey(String key) {
+        return config.contains(key);
     }
 }

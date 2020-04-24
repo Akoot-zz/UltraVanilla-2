@@ -3,7 +3,7 @@ version: ${project.version}
 main: net.akoot.plugins.ultravanilla.UltraVanilla
 api-version: 1.15
 prefix: UV
-loadbefore: [AdminVanilla, ExtraVanilla]
+loadbefore: [AdminVanilla, ExtraVanilla, DiscordVanilla]
 authors: [Akoot_]
 description: Core plugin for UItraVanilla
 website: https://akoot.net/plugins/ultravanilla

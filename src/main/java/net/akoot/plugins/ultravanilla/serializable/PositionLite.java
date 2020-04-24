@@ -200,7 +200,7 @@ public class PositionLite implements ConfigurationSerializable {
     }
 
     private String getWorldStringColored() {
-        return UltraVanilla.getInstance().getStrings().getString("worlds." + world);
+        return UltraVanilla.getInstance().getStrings().getVariable("worlds." + world);
     }
 
     public String toString(String format) {

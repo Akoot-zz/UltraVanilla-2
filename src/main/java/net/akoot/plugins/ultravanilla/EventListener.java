@@ -14,7 +14,7 @@ import java.util.List;
 
 public class EventListener implements Listener {
 
-    private UltraVanilla plugin;
+    private final UltraVanilla plugin;
 
     public EventListener(UltraVanilla instance) {
         plugin = instance;
@@ -50,7 +50,7 @@ public class EventListener implements Listener {
         for (UltraPlugin hook : UltraVanilla.getHooks()) {
             String lastVersionPath = UltraPaths.User.LAST_VERSION + "." + hook.getDescription().getName();
             String currentVersion = hook.getDescription().getVersion();
-            if (!config.get(lastVersionPath, "").equals(currentVersion)) {
+            if (!config.get(lastVersionPath, currentVersion).equals(currentVersion)) {
                 player.performCommand("uv changelog " + hook.getDescription().getName().toLowerCase());
                 config.set(UltraPaths.User.LAST_VERSION + "." + hook.getDescription().getName(), hook.getDescription().getVersion());
             }

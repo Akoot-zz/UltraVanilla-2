@@ -8,7 +8,6 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,7 +39,7 @@ public class UltraPlugin extends JavaPlugin {
         getDataFolder().mkdirs();
 
         strings = new Strings(this, getClass());
-        changelog = new Config(this, getClass(), "changelog.yml");
+        changelog = new Config(this, getClass(), "changelog.yml", "changelog");
 
         copyDefaults("changelog.yml");
 
@@ -87,6 +86,6 @@ public class UltraPlugin extends JavaPlugin {
     }
 
     protected void copyDefaults(String file) {
-        IOUtil.copyDefaults(new File(getDataFolder(), file), getClass(), true);
+        IOUtil.copyDefaults(getDataFolder(), file, getClass(), true);
     }
 }

@@ -4,13 +4,15 @@ import net.akoot.plugins.ultravanilla.commands.UltravanillaCommand;
 import net.akoot.plugins.ultravanilla.serializable.Position;
 import net.akoot.plugins.ultravanilla.serializable.PositionLite;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public final class UltraVanilla extends UltraPlugin {
 
     private static UltraVanilla instance;
-    private static Set<UltraPlugin> hooks = new HashSet<>();
+    private static final Set<UltraPlugin> hooks = new HashSet<>();
 
     public static UltraVanilla getInstance() {
         return instance;
@@ -33,8 +35,17 @@ public final class UltraVanilla extends UltraPlugin {
         return null;
     }
 
-    @Override
-    public void onDisable() {
+    /**
+     * Get the name of all the hooks
+     *
+     * @return The name of all the hooks
+     */
+    public static List<String> getHookNames() {
+        List<String> hookNames = new ArrayList<>();
+        for (UltraPlugin hook : hooks) {
+            hookNames.add(hook.getName());
+        }
+        return hookNames;
     }
 
     @Override
