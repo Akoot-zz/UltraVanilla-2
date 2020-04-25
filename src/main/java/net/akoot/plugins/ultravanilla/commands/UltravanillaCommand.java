@@ -41,7 +41,7 @@ public class UltravanillaCommand extends UltraCommand implements CommandExecutor
                     }
                     sender.sendMessage(message("reload.all"));
                 } else {
-                    sender.sendMessage(strings.getFormattedMessage("error.no-permission", "%a", "reload the configs"));
+                    sender.sendMessage(noPermission("reload-config"));
                 }
             } else if (args[0].equalsIgnoreCase("changelog")) {
                 color = ChatColor.GRAY;
@@ -58,7 +58,7 @@ public class UltravanillaCommand extends UltraCommand implements CommandExecutor
                     UltraPlugin hook = UltraVanilla.getHook(args[1]);
                     if (hook != null) {
                         hook.reload();
-                        sender.sendMessage(message("reload.plugin", "%p", hook.getName()));
+                        sender.sendMessage(message("reload.module", "%p", hook.getName()));
                     } else {
                         sender.sendMessage(error("plugin-invalid", "%p", args[1]));
                     }

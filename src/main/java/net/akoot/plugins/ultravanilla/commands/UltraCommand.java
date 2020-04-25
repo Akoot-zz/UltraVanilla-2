@@ -3,7 +3,7 @@ package net.akoot.plugins.ultravanilla.commands;
 import net.akoot.plugins.ultravanilla.Strings;
 import net.akoot.plugins.ultravanilla.UltraPlugin;
 import net.akoot.plugins.ultravanilla.UltraVanilla;
-import net.akoot.plugins.ultravanilla.reference.UltraPaths;
+import net.akoot.plugins.ultravanilla.reference.References;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -255,18 +255,38 @@ public class UltraCommand implements CommandExecutor {
      * @return The formatted string
      */
     protected String message(String key, String... format) {
-        return format("messages." + key, format);
+        return format("message." + key, format);
     }
 
     /**
      * Get a formatted error message for the specified command.
      *
-     * @param key     The name of the key after 'strings.'
-     * @param format  The placeholder(s) and replacement(s)
+     * @param key    The name of the key after 'strings.'
+     * @param format The placeholder(s) and replacement(s)
      * @return The formatted error string
      */
     protected String error(String key, String... format) {
-        return format("error." + key, format);
+        return format("message.error." + key, format);
+    }
+
+    /**
+     * Broadcasts a message to the server
+     *
+     * @param key    The key
+     * @param format The format
+     */
+    protected void broadcast(String key, String... format) {
+        plugin.getServer().broadcastMessage(format("broadcasts." + key, format));
+    }
+
+    /**
+     * Gets a variable from the command's strings config
+     *
+     * @param key The key
+     * @return The variable from the command's strings config
+     */
+    protected String getVariable(String key) {
+        return strings.getCommandString(command, "variable." + key);
     }
 
 
@@ -281,7 +301,7 @@ public class UltraCommand implements CommandExecutor {
         try {
             return Integer.parseInt(arg);
         } catch (NumberFormatException e) {
-            sender.sendMessage(strings.getFormattedMessage("error.not-a-number", "{number}", arg));
+            sender.sendMessage(strings.getFormattedMessage("error.not-a-number", "%#", arg));
             return -1;
         }
     }
@@ -293,7 +313,7 @@ public class UltraCommand implements CommandExecutor {
      * @return Whether or not the command has a message
      */
     protected boolean hasMessage(String key) {
-        return strings.hasCommandKey(command, "messages." + key);
+        return strings.hasCommandKey(command, "message." + key);
     }
 
     /**
@@ -385,7 +405,7 @@ public class UltraCommand implements CommandExecutor {
      * @return A message saying a player is offline
      */
     protected String playerOffline(String offlinePlayer) {
-        return uvStrings.getFormattedMessage(UltraPaths.Strings.PLAYER_OFFLINE, "%p", offlinePlayer);
+        return uvStrings.getFormattedMessage(References.Messages.PLAYER_OFFLINE, "%p", offlinePlayer);
     }
 
     /**
@@ -395,7 +415,7 @@ public class UltraCommand implements CommandExecutor {
      * @return A message saying a player is invalid
      */
     protected String playerInvalid(String invalidPlayer) {
-        return uvStrings.getFormattedMessage(UltraPaths.Strings.PLAYER_NULL, "%p", invalidPlayer);
+        return uvStrings.getFormattedMessage(References.Messages.PLAYER_NULL, "%p", invalidPlayer);
     }
 
     /**
@@ -405,7 +425,7 @@ public class UltraCommand implements CommandExecutor {
      * @return A string asserting you must be a player to do a certain action
      */
     protected String playerOnly(String action) {
-        return uvStrings.getFormattedMessage(UltraPaths.Strings.PLAYER_ONLY, "%a", action);
+        return uvStrings.getFormattedMessage(References.Messages.PLAYER_ONLY, "%a", getVariable("player-only." + action));
     }
 
     /**
@@ -415,7 +435,7 @@ public class UltraCommand implements CommandExecutor {
      * @return A string asserting you must have permission to perform a certain action
      */
     protected String noPermission(String action) {
-        return uvStrings.getFormattedMessage(UltraPaths.Strings.NO_PERMISSION, "%a", action);
+        return uvStrings.getFormattedMessage(References.Messages.NO_PERMISSION, "%a", getVariable("no-permission." + action));
     }
 
 

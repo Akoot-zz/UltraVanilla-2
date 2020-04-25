@@ -1,6 +1,6 @@
 package net.akoot.plugins.ultravanilla;
 
-import net.akoot.plugins.ultravanilla.reference.UltraPaths;
+import net.akoot.plugins.ultravanilla.reference.References;
 import net.akoot.plugins.ultravanilla.serializable.PositionLite;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -35,24 +35,24 @@ public class EventListener implements Listener {
 
         // Set the first-join time if they joined for the first time
         if (!event.getPlayer().hasPlayedBefore()) {
-            config.set(UltraPaths.User.FIRST_LOGIN, System.currentTimeMillis());
-            config.set(UltraPaths.User.PAST_NAMES, Collections.singletonList(name));
+            config.set(References.User.FIRST_LOGIN, System.currentTimeMillis());
+            config.set(References.User.PAST_NAMES, Collections.singletonList(name));
         }
 
         // If the user has changed their username, add it to their past-names list
-        List<String> pastNames = config.getStringList(UltraPaths.User.PAST_NAMES);
+        List<String> pastNames = config.getStringList(References.User.PAST_NAMES);
         if (!pastNames.contains(name)) {
             pastNames.add(name);
-            config.set(UltraPaths.User.PAST_NAMES, pastNames);
+            config.set(References.User.PAST_NAMES, pastNames);
         }
 
         // Set the last version of each hook
         for (UltraPlugin hook : UltraVanilla.getHooks()) {
-            String lastVersionPath = UltraPaths.User.LAST_VERSION + "." + hook.getDescription().getName();
+            String lastVersionPath = References.User.LAST_VERSION + "." + hook.getDescription().getName();
             String currentVersion = hook.getDescription().getVersion();
             if (!config.get(lastVersionPath, currentVersion).equals(currentVersion)) {
                 player.performCommand("uv changelog " + hook.getDescription().getName().toLowerCase());
-                config.set(UltraPaths.User.LAST_VERSION + "." + hook.getDescription().getName(), hook.getDescription().getVersion());
+                config.set(References.User.LAST_VERSION + "." + hook.getDescription().getName(), hook.getDescription().getVersion());
             }
         }
 
@@ -71,10 +71,10 @@ public class EventListener implements Listener {
 
         // Set the playtime
         long difference = player.getLastSeen() - player.getLastLogin();
-        config.set(UltraPaths.User.PLAYTIME, config.getLong(UltraPaths.User.PLAYTIME, 0L) + difference);
+        config.set(References.User.PLAYTIME, config.getLong(References.User.PLAYTIME, 0L) + difference);
 
         // Set the last position
-        config.set(UltraPaths.User.LAST_LOCATION, new PositionLite(player.getLocation()));
+        config.set(References.User.LAST_LOCATION, new PositionLite(player.getLocation()));
 
         // Register the user config in the Users.users Map
         Users.unregisterUser(player);

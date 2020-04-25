@@ -3,3 +3,4 @@ error:
   player-only: "&xYou must be a player in order to &w&>%a&x."
   player-null: "&xPlayer &w%p&x was never online!"
   player-offline: "&xPlayer &w%p&x is not online!"
+  not-a-number: "&#%# &wis not a number!"

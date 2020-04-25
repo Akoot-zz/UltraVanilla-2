@@ -1,4 +1,8 @@
-messages:
+variable:
+  error:
+    no-permission:
+      reload-config: "reload configs"
+message:
   no-args:
     version: "&6UltraVanilla: &7%v"
     modules:
@@ -6,8 +10,8 @@ messages:
       item: "&a%v%$&7, "
       after: "&a]"
   reload:
-    all: "All configurations were reloaded!"
-    plugin: "&.%p &:has been reloaded!"
+    all: "All module configurations were reloaded!"
+    module: "&.%p &:has been reloaded!"
   changelog:
     title: "---------- &.%n &#%v &:----------"
     fixed: "&e* Fixed &:%v\n"
