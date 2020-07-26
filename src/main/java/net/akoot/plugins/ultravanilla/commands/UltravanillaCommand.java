@@ -3,25 +3,20 @@ package net.akoot.plugins.ultravanilla.commands;
 import net.akoot.plugins.ultravanilla.Config;
 import net.akoot.plugins.ultravanilla.UltraPlugin;
 import net.akoot.plugins.ultravanilla.UltraVanilla;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UltravanillaCommand extends UltraCommand implements CommandExecutor, TabExecutor {
+public class UltravanillaCommand extends UltraCommand {
 
     public UltravanillaCommand(UltraVanilla instance) {
         super(instance, ChatColor.GOLD);
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-        this.command = command;
+    public boolean onCommand() {
 
         // Sub-commands: none
         if (args.length == 0) {
@@ -130,7 +125,7 @@ public class UltravanillaCommand extends UltraCommand implements CommandExecutor
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete() {
         List<String> suggestions = new ArrayList<>();
         if (args.length == 1) {
             suggestions.add("changelog");
@@ -142,6 +137,6 @@ public class UltravanillaCommand extends UltraCommand implements CommandExecutor
                 }
             }
         }
-        return getSuggestions(suggestions, args);
+        return suggestions;
     }
 }

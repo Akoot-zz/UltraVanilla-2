@@ -4,11 +4,13 @@ import net.akoot.plugins.ultravanilla.Strings;
 import net.akoot.plugins.ultravanilla.UltraPlugin;
 import net.akoot.plugins.ultravanilla.UltraVanilla;
 import net.akoot.plugins.ultravanilla.reference.References;
-import org.bukkit.ChatColor;
+import net.akoot.plugins.ultravanilla.util.StringUtil;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -17,14 +19,17 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UltraCommand implements CommandExecutor {
+public abstract class UltraCommand implements CommandExecutor, TabCompleter {
 
     public ChatColor color;
     protected UltraPlugin plugin;
     protected Random random;
     protected Strings strings;
     protected Strings uvStrings;
+    protected CommandSender sender;
     protected Command command;
+    protected String label;
+    protected String[] args;
 
     public UltraCommand(UltraPlugin plugin, ChatColor color) {
         this.plugin = plugin;
@@ -42,26 +47,21 @@ public class UltraCommand implements CommandExecutor {
      * Adds an ' or an 's depending if someone's name ends with S or not.
      *
      * @param item A name
-     * @return A name with 's or ' depending if it ends with S i.e. notch's, ness'
+     * @return A name with 's or ' depending if it ends with S i.e. notch's'
      */
     protected String posessive(String item) {
         return item + (item.endsWith("s") ? "'" : "'s");
     }
 
     /**
-     * Combines arguments separated by a space into one single argument using double quotes '"'.
+     * Combines arguments separated by a space into one single argument using double quotes or single quotes.
+     * Use '/' as a delimiter.
      *
      * @param args All of the arguments
      * @return Arguments with spaces
      */
     protected String[] refinedArgs(String[] args) {
-        Pattern pattern = Pattern.compile("\"[^\"]+\"|[-\\w]+");
-        Matcher matcher = pattern.matcher(String.join(" ", args));
-        List<String> refined = new ArrayList<>();
-        while (matcher.find()) {
-            refined.add(matcher.group().replace("\"", ""));
-        }
-        return refined.toArray(new String[0]);
+        return StringUtil.toArgs(String.join(" ", args));
     }
 
     /**
@@ -155,7 +155,7 @@ public class UltraCommand implements CommandExecutor {
         // Handle @a selector
         if (arg.contains("@a")) {
             players.addAll(plugin.getServer().getOnlinePlayers());
-            filterPlayers(arg, players);
+            excludePlayers(arg, players);
         }
 
         // Handle @r selector
@@ -163,7 +163,7 @@ public class UltraCommand implements CommandExecutor {
 
             // Temporarily fill 'players' list with all online players
             players.addAll(plugin.getServer().getOnlinePlayers());
-            filterPlayers(arg, players);
+            excludePlayers(arg, players);
 
             // If there is at least 1 player online, clear 'players' list and add one random player from the list
             if (!players.isEmpty()) {
@@ -211,15 +211,17 @@ public class UltraCommand implements CommandExecutor {
         return players;
     }
 
-    private void filterPlayers(String arg, List<Player> players) {
+    /**
+     * Exclude players using !
+     *
+     * @param arg     The players to exclude
+     * @param players The list of players to exclude from
+     */
+    private void excludePlayers(String arg, List<Player> players) {
         if (arg.contains("!")) {
             arg = arg.substring(arg.indexOf("!") + 1);
             for (String name : arg.split("!")) {
-                for (Player player : players) {
-                    if (player.getName().startsWith(name)) {
-                        players.remove(player);
-                    }
-                }
+                players.removeIf(player -> player.getName().startsWith(name));
             }
         }
     }
@@ -297,12 +299,12 @@ public class UltraCommand implements CommandExecutor {
      * @param arg    The argument to retrieve the integer from
      * @return The integer gotten from the argument, -1 if it's not a number
      */
-    protected int getInt(CommandSender sender, String arg) {
+    protected Integer getInt(CommandSender sender, String arg) {
         try {
             return Integer.parseInt(arg);
         } catch (NumberFormatException e) {
             sender.sendMessage(strings.getFormattedMessage("error.not-a-number", "%#", arg));
-            return -1;
+            return null;
         }
     }
 
@@ -438,9 +440,25 @@ public class UltraCommand implements CommandExecutor {
         return uvStrings.getFormattedMessage(References.Messages.NO_PERMISSION, "%a", getVariable("no-permission." + action));
     }
 
+    protected abstract boolean onCommand();
+
+    protected abstract List<String> onTabComplete();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        return false;
+        this.sender = sender;
+        this.command = command;
+        this.label = label;
+        this.args = refinedArgs(args);
+        return onCommand();
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        this.sender = sender;
+        this.command = command;
+        this.label = label;
+        this.args = refinedArgs(args);
+        return getSuggestions(onTabComplete(), args);
     }
 }
