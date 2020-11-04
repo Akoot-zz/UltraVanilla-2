@@ -1,6 +1,5 @@
 package net.akoot.plugins.ultravanilla.util;
 
-import net.akoot.plugins.ultravanilla.JsonConfig;
 import net.akoot.plugins.ultravanilla.UltraVanilla;
 import net.md_5.bungee.api.ChatColor;
 import org.json.JSONObject;
@@ -13,6 +12,7 @@ import java.util.regex.Pattern;
 public class Colors {
 
     public static final String MIX_SYMBOL = "+";
+    public static final char[] rainbow = {'a', '3', '9', '5', 'd', 'c', '6', 'e'};
     private static String nameMatch;
     private static String classMatch;
     private static String gradientMatch;
@@ -51,6 +51,15 @@ public class Colors {
     }
 
     public static String translate(String str) {
+
+        // Rainbow
+        if (str.contains("&x")) {
+            Pattern p = Pattern.compile("&x([^&$]+)");
+            Matcher m = p.matcher(str);
+            while (m.find()) {
+                str = str.replace(m.group(), rainbowGradient(m.group(1)));
+            }
+        }
 
         // Color from RGB
         if (str.contains("&#")) {
@@ -112,6 +121,36 @@ public class Colors {
 
     public static String gradient(String str, String color1, String color2) {
         return gradient(str, from(color1), from(color2));
+    }
+
+    public static String rainbow(String string) {
+        char[] chars = string.toCharArray();
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < chars.length; i++) {
+            str.append("&").append(rainbow[i % rainbow.length]).append(chars[i]);
+        }
+        return str.toString();
+    }
+
+    public static String rainbowGradient(String string) {
+        int length = string.length();
+        if (length >= 8) {
+            int eight = length / 8;
+            int quarter = length / 4;
+            int half = length / 2;
+            String[] sectionStrings = new String[8];
+            sectionStrings[0] = "&>a+3" + string.substring(0, eight);
+            sectionStrings[1] = "&>3+9" + string.substring(eight, quarter);
+            sectionStrings[2] = "&>9+5" + string.substring(quarter, quarter + eight);
+            sectionStrings[3] = "&>5+d" + string.substring(quarter + eight, half);
+            sectionStrings[4] = "&>d+c" + string.substring(half, half + eight);
+            sectionStrings[5] = "&>c+6" + string.substring(half + eight, half + quarter);
+            sectionStrings[6] = "&>6+e" + string.substring(half + quarter, half + quarter + eight);
+            sectionStrings[7] = "&>e+a" + string.substring(half + quarter + eight, length);
+            return String.join("", sectionStrings);
+        } else {
+            return rainbow(string);
+        }
     }
 
     // implementation by lordpipe

@@ -1,7 +1,6 @@
-package net.akoot.plugins.ultravanilla;
+package net.akoot.plugins.ultravanilla.util;
 
 import net.akoot.plugins.ultravanilla.reference.Palette;
-import net.akoot.plugins.ultravanilla.util.StringUtil;
 import org.bukkit.command.Command;
 import org.bukkit.plugin.java.JavaPlugin;
 

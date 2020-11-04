@@ -1,10 +1,10 @@
 package net.akoot.plugins.ultravanilla.commands;
 
-import net.akoot.plugins.ultravanilla.Strings;
 import net.akoot.plugins.ultravanilla.UltraPlugin;
 import net.akoot.plugins.ultravanilla.UltraVanilla;
 import net.akoot.plugins.ultravanilla.reference.References;
 import net.akoot.plugins.ultravanilla.util.StringUtil;
+import net.akoot.plugins.ultravanilla.util.Strings;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;

@@ -4,6 +4,7 @@ import net.akoot.plugins.ultravanilla.commands.UltravanillaCommand;
 import net.akoot.plugins.ultravanilla.serializable.Position;
 import net.akoot.plugins.ultravanilla.serializable.PositionLite;
 import net.akoot.plugins.ultravanilla.util.Colors;
+import net.akoot.plugins.ultravanilla.util.JsonConfig;
 
 import java.util.ArrayList;
 import java.util.HashSet;

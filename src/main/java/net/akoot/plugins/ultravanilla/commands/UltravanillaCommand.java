@@ -1,8 +1,8 @@
 package net.akoot.plugins.ultravanilla.commands;
 
-import net.akoot.plugins.ultravanilla.Config;
 import net.akoot.plugins.ultravanilla.UltraPlugin;
 import net.akoot.plugins.ultravanilla.UltraVanilla;
+import net.akoot.plugins.ultravanilla.util.Config;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 

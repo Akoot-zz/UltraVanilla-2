@@ -1,6 +1,5 @@
-package net.akoot.plugins.ultravanilla;
+package net.akoot.plugins.ultravanilla.util;
 
-import net.akoot.plugins.ultravanilla.util.IOUtil;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;

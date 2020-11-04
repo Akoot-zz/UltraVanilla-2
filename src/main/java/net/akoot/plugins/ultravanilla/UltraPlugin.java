@@ -1,7 +1,9 @@
 package net.akoot.plugins.ultravanilla;
 
 import net.akoot.plugins.ultravanilla.commands.UltraCommand;
+import net.akoot.plugins.ultravanilla.util.Config;
 import net.akoot.plugins.ultravanilla.util.IOUtil;
+import net.akoot.plugins.ultravanilla.util.Strings;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;

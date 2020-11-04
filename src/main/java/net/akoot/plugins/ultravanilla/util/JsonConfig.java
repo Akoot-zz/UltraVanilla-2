@@ -1,6 +1,5 @@
-package net.akoot.plugins.ultravanilla;
+package net.akoot.plugins.ultravanilla.util;
 
-import net.akoot.plugins.ultravanilla.util.IOUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONObject;
 
