@@ -3,6 +3,7 @@ package net.akoot.plugins.ultravanilla;
 import net.akoot.plugins.ultravanilla.commands.UltravanillaCommand;
 import net.akoot.plugins.ultravanilla.serializable.Position;
 import net.akoot.plugins.ultravanilla.serializable.PositionLite;
+import net.akoot.plugins.ultravanilla.util.Colors;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -60,8 +61,14 @@ public final class UltraVanilla extends UltraPlugin {
         // Create directories
         Users.DIR.mkdir();
 
-        // Copy defaults from the jar for config.yml if needed
+        // Copy defaults from the jar if needed
         copyDefaults("config.yml");
+
+        // Read colors from JSON
+        registerConfig(new JsonConfig(this, getClass(), "colors.json", "colors"));
+
+        // Initiate Colors class
+        Colors.init();
 
         // Register /ultravanilla command
         registerCommand("ultravanilla", new UltravanillaCommand(this));
@@ -69,5 +76,4 @@ public final class UltraVanilla extends UltraPlugin {
         // Register events
         registerEvents(new EventListener(this));
     }
-
 }

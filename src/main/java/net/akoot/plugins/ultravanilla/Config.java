@@ -15,7 +15,7 @@ public class Config {
     protected String id;
     protected File file;
     protected Class root;
-    private JavaPlugin plugin;
+    protected JavaPlugin plugin;
 
     public Config(JavaPlugin plugin, Class root, String path, String id) {
 
@@ -34,10 +34,7 @@ public class Config {
         // Set the id
         this.id = id;
 
-        // Copy defaults from the jar if needed
-        IOUtil.copyDefaults(plugin.getDataFolder(), path, root);
-
-        // Load the configuration from file
+        // Load the configuration from file. Copy defaults from the jar if needed
         reload();
     }
 
@@ -59,7 +56,7 @@ public class Config {
     }
 
     /**
-     * Reload the strings object with the info written on file
+     * Reload the strings object with the info written on file. Copy defaults from the jar if needed
      */
     public void reload() {
         try {

@@ -11,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashSet;
 import java.util.Set;
 
-public class UltraPlugin extends JavaPlugin {
+public abstract class UltraPlugin extends JavaPlugin {
 
     protected UltraVanilla uv;
     protected Strings strings;
@@ -50,14 +50,22 @@ public class UltraPlugin extends JavaPlugin {
         start();
     }
 
-    protected void start() {
-    }
+    protected abstract void start();
 
     protected void registerCommand(String name, UltraCommand command) {
         PluginCommand cmd = getCommand(name);
         if (cmd != null) {
             cmd.setExecutor(command);
         }
+    }
+
+    public Config getConfig(String id) {
+        for (Config config : configs) {
+            if (config.getId().equals(id)) {
+                return config;
+            }
+        }
+        return null;
     }
 
     protected void registerConfig(Config config) {

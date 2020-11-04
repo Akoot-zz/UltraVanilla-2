@@ -2,10 +2,12 @@ package net.akoot.plugins.ultravanilla;
 
 import net.akoot.plugins.ultravanilla.reference.References;
 import net.akoot.plugins.ultravanilla.serializable.PositionLite;
+import net.akoot.plugins.ultravanilla.util.Colors;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -78,5 +80,10 @@ public class EventListener implements Listener {
 
         // Register the user config in the Users.users Map
         Users.unregisterUser(player);
+    }
+
+    @EventHandler
+    public void onPlayerChat(AsyncPlayerChatEvent event) {
+        event.setMessage(Colors.translate(event.getMessage()));
     }
 }

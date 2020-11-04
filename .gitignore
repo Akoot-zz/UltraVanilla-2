@@ -1,4 +1,4 @@
-src/test/server
+src/test/server/
 target
 .idea
 !.idea
