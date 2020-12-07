@@ -8,7 +8,7 @@ import java.util.List;
 public class TemplateCommand extends UltraCommand {
 
     public TemplateCommand(UltraPlugin instance) {
-        super(instance, ChatColor.WHITE);
+        super(instance, ChatColor.of("#ffffff"));
     }
 
     @Override

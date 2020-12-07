@@ -135,18 +135,18 @@ public class Colors {
     public static String rainbowGradient(String string) {
         int length = string.length();
         if (length >= 8) {
-            int eight = length / 8;
+            int eighth = length / 8;
             int quarter = length / 4;
             int half = length / 2;
             String[] sectionStrings = new String[8];
-            sectionStrings[0] = "&>a+3" + string.substring(0, eight);
-            sectionStrings[1] = "&>3+9" + string.substring(eight, quarter);
-            sectionStrings[2] = "&>9+5" + string.substring(quarter, quarter + eight);
-            sectionStrings[3] = "&>5+d" + string.substring(quarter + eight, half);
-            sectionStrings[4] = "&>d+c" + string.substring(half, half + eight);
-            sectionStrings[5] = "&>c+6" + string.substring(half + eight, half + quarter);
-            sectionStrings[6] = "&>6+e" + string.substring(half + quarter, half + quarter + eight);
-            sectionStrings[7] = "&>e+a" + string.substring(half + quarter + eight, length);
+            sectionStrings[0] = "&>a+3" + string.substring(0, eighth);
+            sectionStrings[1] = "&>3+9" + string.substring(eighth, quarter);
+            sectionStrings[2] = "&>9+5" + string.substring(quarter, quarter + eighth);
+            sectionStrings[3] = "&>5+d" + string.substring(quarter + eighth, half);
+            sectionStrings[4] = "&>d+c" + string.substring(half, half + eighth);
+            sectionStrings[5] = "&>c+6" + string.substring(half + eighth, half + quarter);
+            sectionStrings[6] = "&>6+e" + string.substring(half + quarter, half + quarter + eighth);
+            sectionStrings[7] = "&>e+a" + string.substring(half + quarter + eighth, length);
             return String.join("", sectionStrings);
         } else {
             return rainbow(string);

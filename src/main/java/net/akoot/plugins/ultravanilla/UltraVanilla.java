@@ -68,6 +68,9 @@ public final class UltraVanilla extends UltraPlugin {
         // Read colors from JSON
         registerConfig(new JsonConfig(this, getClass(), "colors.json", "colors"));
 
+        // Read palettes from JSON
+        registerConfig(new JsonConfig(this, getClass(), "palettes.json", "palettes"));
+
         // Initiate Colors class
         Colors.init();
 

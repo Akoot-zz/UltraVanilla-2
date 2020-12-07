@@ -1,0 +1,211 @@
+[
+  {
+    "id": "default",
+    "name": "Default",
+    "description": "The default Minecraft palette (pre-1.16).",
+    "colors": [
+      {
+        "id": "black",
+        "name": "Black",
+        "value": "#000000"
+      },
+      {
+        "id": "dark_blue",
+        "name": "Dark Blue",
+        "value": "#0000aa"
+      },
+      {
+        "id": "dark_green",
+        "name": "Dark Green",
+        "value": "#0aa00"
+      },
+      {
+        "id": "dark_aqua",
+        "name": "Dark Aqua",
+        "value": "#00aaaa"
+      },
+      {
+        "id": "dark_red",
+        "name": "Dark Red",
+        "value": "#a0000"
+      },
+      {
+        "id": "dark_purple",
+        "name": "Dark Purple",
+        "value": "#aa00aa"
+      },
+      {
+        "id": "gold",
+        "name": "Gold",
+        "value": "#ffaa00"
+      },
+      {
+        "id": "gray",
+        "name": "Gray",
+        "value": "#aaaaaa"
+      },
+      {
+        "id": "dark_gray",
+        "name": "Dark Gray",
+        "value": "#555555"
+      },
+      {
+        "id": "blue",
+        "name": "Blue",
+        "value": "#5555ff"
+      },
+      {
+        "id": "green",
+        "name": "Green",
+        "value": "#55ff55"
+      },
+      {
+        "id": "aqua",
+        "name": "Aqua",
+        "value": "#55ffff"
+      },
+      {
+        "id": "red",
+        "name": "Red",
+        "value": "#ff5555"
+      },
+      {
+        "id": "light_purple",
+        "name": "Light Purple",
+        "value": "#ff55ff"
+      },
+      {
+        "id": "yellow",
+        "name": "yellow",
+        "value": "#ffff55"
+      },
+      {
+        "id": "white",
+        "name": "White",
+        "value": "#ffffff"
+      }
+    ]
+  },
+  {
+    "id": "ultravanilla",
+    "name": "UltraVanilla",
+    "description": "The official UltraVanilla color palette.",
+    "colors": [
+      {
+        "id": "orange",
+        "name": "Orange",
+        "value": "#f48e09"
+      },
+      {
+        "id": "dark_orange",
+        "name": "Dark Orange",
+        "value": "#f45409"
+      },
+      {
+        "id": "deep_red",
+        "name": "Deep Red",
+        "value": "#f42424"
+      },
+      {
+        "id": "salmon",
+        "name": "Salmon",
+        "value": "#ea543c"
+      },
+      {
+        "id": "lavender",
+        "name": "Lavender",
+        "value": "#c16ee5"
+      },
+      {
+        "id": "light_lavender",
+        "name": "Light Lavender",
+        "value": "#ce8ad8"
+      },
+      {
+        "id": "purple",
+        "name": "Purple",
+        "value": "#7e47e5"
+      },
+      {
+        "id": "blue_purple",
+        "name": "Blue-purple",
+        "value": "#6635ea"
+      },
+      {
+        "id": "sky_blue",
+        "name": "Sky Blue",
+        "value": "#abd5fc"
+      },
+      {
+        "id": "cyan",
+        "name": "Cyan",
+        "value": "389eff"
+      },
+      {
+        "id": "cyanide",
+        "name": "Cyanide",
+        "value": "#2de6ff"
+      },
+      {
+        "id": "light_cyanide",
+        "name": "Light Cyanide",
+        "value": "#98eef9"
+      },
+      {
+        "id": "seafoam_green",
+        "name": "Seafoam Green",
+        "value": "#84edd1"
+      },
+      {
+        "id": "patel_brown",
+        "name": "Pastel Brown",
+        "value": "#dbb592"
+      },
+      {
+        "id": "light_buttercream",
+        "name": "Light Buttercream",
+        "value": "#fcf094"
+      },
+      {
+        "id": "buttercream",
+        "name": "Buttercream",
+        "value": "#f7e667"
+      },
+      {
+        "id": "lime",
+        "name": "Lime",
+        "value": "#88f931"
+      },
+      {
+        "id": "lemon",
+        "name": "Lemon",
+        "value": "#f4f430"
+      },
+      {
+        "id": "ezek_teal",
+        "name": "Ezek Teal",
+        "value": "#55f4b7"
+      },
+      {
+        "id": "akoot_blue",
+        "name": "Akoot Blue",
+        "value": "#40a6f8"
+      },
+      {
+        "id": "kekhon_brown",
+        "name": "Kekhon Brown",
+        "value": "#f7e259"
+      },
+      {
+        "id": "apricot",
+        "name": "Apricot",
+        "value": "#f18d2f"
+      },
+      {
+        "id": "pumpkin",
+        "name": "Pumpkin",
+        "value": "#fc7e00"
+      }
+    ]
+  }
+]
