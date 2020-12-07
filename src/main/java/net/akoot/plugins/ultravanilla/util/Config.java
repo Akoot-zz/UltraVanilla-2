@@ -18,6 +18,9 @@ public class Config {
 
     public Config(JavaPlugin plugin, Class root, String path, String id) {
 
+        // Set the plugin
+        this.plugin = plugin;
+
         // Set the root class to search for internal jar files
         this.root = root;
 

@@ -1,5 +1,6 @@
 package net.akoot.plugins.ultravanilla;
 
+import com.google.gson.Gson;
 import net.akoot.plugins.ultravanilla.commands.UltravanillaCommand;
 import net.akoot.plugins.ultravanilla.serializable.Position;
 import net.akoot.plugins.ultravanilla.serializable.PositionLite;
@@ -28,6 +29,8 @@ public final class UltraVanilla extends UltraPlugin {
         hooks.add(plugin);
     }
 
+    private static Gson gson;
+
     public static UltraPlugin getHook(String name) {
         for (UltraPlugin hook : hooks) {
             if (hook.getDescription().getName().equalsIgnoreCase(name)) {
@@ -50,10 +53,18 @@ public final class UltraVanilla extends UltraPlugin {
         return hookNames;
     }
 
+    public static Gson getGson() {
+        return gson;
+    }
+
     @Override
     public void start() {
 
+        // Set instance to uv
         instance = uv;
+
+        // Gson instance
+        gson = new Gson();
 
         // Register serializable classes
         serialize(Position.class, "Position");
@@ -67,9 +78,6 @@ public final class UltraVanilla extends UltraPlugin {
 
         // Read colors from JSON
         registerConfig(new JsonConfig(this, getClass(), "colors.json", "colors"));
-
-        // Read palettes from JSON
-        registerConfig(new JsonConfig(this, getClass(), "palettes.json", "palettes"));
 
         // Initiate Colors class
         Colors.init();

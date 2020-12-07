@@ -1,11 +1,16 @@
 package net.akoot.plugins.ultravanilla.util;
 
+import com.google.gson.reflect.TypeToken;
 import net.akoot.plugins.ultravanilla.UltraVanilla;
 import net.md_5.bungee.api.ChatColor;
 import org.json.JSONObject;
 
 import java.awt.*;
 import java.awt.color.ColorSpace;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,20 +18,31 @@ public class Colors {
 
     public static final String MIX_SYMBOL = "+";
     public static final char[] rainbow = {'a', '3', '9', '5', 'd', 'c', '6', 'e'};
+    public static List<Palette> palettes;
     private static String nameMatch;
-    private static String classMatch;
     private static String gradientMatch;
-    private static JSONObject palette;
     private static JSONObject classes;
     private static JSONObject chat;
 
     public static void init() {
         JSONObject colors = ((JsonConfig) UltraVanilla.getInstance().getConfig("colors")).getJsonObject();
-        palette = colors.getJSONObject("palette");
+        IOUtil.copyDefaults(UltraVanilla.getInstance().getDataFolder(), "palettes.json", UltraVanilla.class);
+        File palettesFile = new File(UltraVanilla.getInstance().getDataFolder(), "palettes.json");
+        try {
+            palettes = UltraVanilla.getGson().fromJson(new String(Files.readAllBytes(palettesFile.toPath())), new TypeToken<List<Palette>>() {
+            }.getType());
+            StringBuilder sb = new StringBuilder();
+            for (Palette palette : palettes) {
+                for (PaletteColor color : palette.getColors()) {
+                    sb.append(color.getId());
+                }
+            }
+            nameMatch = sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         classes = colors.getJSONObject("classes");
         chat = colors.getJSONObject("chat");
-        nameMatch = String.join("|", palette.keySet());
-        classMatch = String.join("|", classes.keySet());
         gradientMatch = "(" + nameMatch + "|#[0-9a-fA-F]{6}|[a-f0-9])";
     }
 
@@ -35,7 +51,14 @@ public class Colors {
     }
 
     public static String getHex(String name) {
-        return palette.getString(name);
+        for (Palette palette : palettes) {
+            for (PaletteColor color : palette.getColors()) {
+                if (color.getId().equals(name)) {
+                    return color.getId();
+                }
+            }
+        }
+        return null;
     }
 
     public static String getClassHex(String className) {
@@ -79,24 +102,6 @@ public class Colors {
             }
         }
 
-        // Names
-        if (str.contains("&$")) {
-            Pattern p = Pattern.compile("&\\$(" + nameMatch + ")");
-            Matcher m = p.matcher(str);
-            while (m.find()) {
-                str = str.replace(m.group(), Colors.of(m.group(1)) + "");
-            }
-        }
-
-        // Classes
-        if (str.contains("&.")) {
-            Pattern p = Pattern.compile("&\\.(" + classMatch + ")");
-            Matcher m = p.matcher(str);
-            while (m.find()) {
-                str = str.replace(m.group(), Colors.of(m.group(1)) + "");
-            }
-        }
-
         return ChatColor.translateAlternateColorCodes('&', str);
     }
 
@@ -132,6 +137,11 @@ public class Colors {
         return str.toString();
     }
 
+    /**
+     * @param string
+     * @return
+     */
+    @Deprecated
     public static String rainbowGradient(String string) {
         int length = string.length();
         if (length >= 8) {

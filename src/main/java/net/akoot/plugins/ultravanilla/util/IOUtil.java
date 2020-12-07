@@ -62,4 +62,21 @@ public class IOUtil {
             }
         }
     }
+
+    /**
+     * Recursively deletes a directory even if it has files
+     *
+     * @param file The directory to delete
+     */
+    public static void deleteDirectory(File file) {
+        if (file.isDirectory()) {
+            if (file.length() == 0) {
+                file.delete();
+            } else {
+                deleteDirectory(file);
+            }
+        } else {
+            file.delete();
+        }
+    }
 }
