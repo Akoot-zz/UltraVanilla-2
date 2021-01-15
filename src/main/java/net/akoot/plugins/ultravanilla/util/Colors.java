@@ -10,6 +10,7 @@ import java.awt.color.ColorSpace;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,6 +25,26 @@ public class Colors {
     private static JSONObject classes;
     private static JSONObject chat;
 
+    public static boolean isHex(String string) {
+        return string.matches("#[a-fA-F0-9]{6}");
+    }
+
+    public static String getHexString(Color color) {
+        return "#" + Integer.toHexString(color.getRGB()).substring(2);
+    }
+
+    public static Color randomColor(float saturation, float brightness) {
+        return Color.getHSBColor(UltraVanilla.getRandom().nextFloat(), saturation, brightness);
+    }
+
+    public static Color randomColor() {
+        return randomColor(0.6f, 0.95f);
+    }
+
+    public static ChatColor randomChatColor() {
+        return ChatColor.of(randomColor());
+    }
+
     public static void init() {
         JSONObject colors = ((JsonConfig) UltraVanilla.getInstance().getConfig("colors")).getJsonObject();
         IOUtil.copyDefaults(UltraVanilla.getInstance().getDataFolder(), "palettes.json", UltraVanilla.class);
@@ -31,30 +52,24 @@ public class Colors {
         try {
             palettes = UltraVanilla.getGson().fromJson(new String(Files.readAllBytes(palettesFile.toPath())), new TypeToken<List<Palette>>() {
             }.getType());
-            StringBuilder sb = new StringBuilder();
-            for (Palette palette : palettes) {
-                for (PaletteColor color : palette.getColors()) {
-                    sb.append(color.getId());
-                }
-            }
-            nameMatch = sb.toString();
+            nameMatch = String.join("|", getAllPaletteNames());
         } catch (IOException e) {
             e.printStackTrace();
         }
         classes = colors.getJSONObject("classes");
         chat = colors.getJSONObject("chat");
-        gradientMatch = "(" + nameMatch + "|#[0-9a-fA-F]{6}|[a-f0-9])";
+        gradientMatch = "(:?" + nameMatch + "|#[0-9a-fA-F]{6}|[a-f0-9])";
     }
 
     public static ChatColor getChatColor(String key) {
         return ChatColor.of(chat.getString(key));
     }
 
-    public static String getHex(String name) {
+    public static String getHex(String id) {
         for (Palette palette : palettes) {
             for (PaletteColor color : palette.getColors()) {
-                if (color.getId().equals(name)) {
-                    return color.getId();
+                if (color.getId().equals(id)) {
+                    return color.getValue();
                 }
             }
         }
@@ -95,11 +110,17 @@ public class Colors {
 
         // Gradients
         if (str.contains("&>")) {
-            Pattern p = Pattern.compile("&>" + gradientMatch + "\\" + MIX_SYMBOL + gradientMatch + "([^&]+|$)");
+            Pattern p = Pattern.compile("&>(" + gradientMatch + "(?:\\+" + gradientMatch + ")+)([^&]+|$)");
             Matcher m = p.matcher(str);
             while (m.find()) {
-                str = str.replace(m.group(), gradient(m.group(3), m.group(1), m.group(2)));
+                str = str.replace(m.group(), gradient(m.group(4), getColors(m.group(1).split("\\+"))));
             }
+
+//            p = Pattern.compile("&>" + gradientMatch + "\\" + MIX_SYMBOL + gradientMatch + "([^&]+|$)");
+//            m = p.matcher(str);
+//            while (m.find()) {
+//                str = str.replace(m.group(), gradient(m.group(3), m.group(1), m.group(2)));
+//            }
         }
 
         return ChatColor.translateAlternateColorCodes('&', str);
@@ -163,6 +184,70 @@ public class Colors {
         }
     }
 
+    public static String translateMultiGradient(String gradientString, String text) {
+        StringBuilder newGradient = new StringBuilder(text);
+        String[] colors = gradientString.split("\\+");
+        int length = colors.length - 1;
+        int chunk = text.length() / length;
+        for (int i = 0; i < length; i++) {
+            int start = i * chunk;
+            newGradient.append("&>").append(colors[i]).append("+").append(colors[i + 1]).append(text, start, start + chunk);
+        }
+        return newGradient.toString();
+    }
+
+    public static Color[] getColors(String... colorStrings) {
+        Color[] colors = new Color[colorStrings.length];
+        for (int i = 0, colorStringsLength = colorStrings.length; i < colorStringsLength; i++) {
+            String colorString = colorStrings[i];
+            String hex = getHex(colorString);
+            if (hex != null) {
+                colors[i] = ChatColor.of(hex).getColor();
+            } else {
+                colors[i] = Color.BLACK;
+            }
+        }
+        return colors;
+    }
+
+    public static String gradient(String str, Color... colors) {
+
+        StringBuilder sb = new StringBuilder();
+
+        ColorSpace cie = ColorSpace.getInstance(ColorSpace.CS_CIEXYZ);
+        ColorSpace srgb = ColorSpace.getInstance(ColorSpace.CS_sRGB);
+
+        int chunkLength = str.length() / colors.length;
+
+        for (int i = 0, colorsLength = colors.length - 1; i < colorsLength; i++) {
+
+            Color from = colors[i];
+            Color to = colors[i + 1];
+
+            float[] cieFrom = cie.fromRGB(from.getRGBColorComponents(null));
+            float[] cieTo = cie.fromRGB(to.getRGBColorComponents(null));
+
+            int start = i * chunkLength;
+            String chunk = str.substring(start, start + chunkLength);
+
+            for (int j = 0; j < chunkLength; j++) {
+
+                float[] interpolatedCie = new float[]{
+                        cieFrom[0] + (i * (1.0F / chunkLength)) * (cieTo[0] - cieFrom[0]),
+                        cieFrom[1] + (i * (1.0F / chunkLength)) * (cieTo[1] - cieFrom[1]),
+                        cieFrom[2] + (i * (1.0F / chunkLength)) * (cieTo[2] - cieFrom[2])
+                };
+
+                // we could just pass the CIE value directly into `new Color`, but it seems the ChatColor API expects the
+                // conversion to sRGB to be pre-computed, so it fails
+                float[] interpolatedSrgb = srgb.fromCIEXYZ(interpolatedCie);
+                sb.append(ChatColor.of(new Color(interpolatedSrgb[0], interpolatedSrgb[1], interpolatedSrgb[2])));
+                sb.append(chunk.charAt(j));
+            }
+        }
+        return sb.toString();
+    }
+
     // implementation by lordpipe
     public static String gradient(String str, Color from, Color to) {
         StringBuilder sb = new StringBuilder();
@@ -188,6 +273,16 @@ public class Colors {
             sb.append(str.charAt(i));
         }
         return sb.toString();
+    }
+
+    public static List<String> getAllPaletteNames() {
+        List<String> names = new ArrayList<>();
+        for (Palette palette : palettes) {
+            for (PaletteColor paletteColor : palette.getColors()) {
+                names.add(paletteColor.getId());
+            }
+        }
+        return names;
     }
 
 }

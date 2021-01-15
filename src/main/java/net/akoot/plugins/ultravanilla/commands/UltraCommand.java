@@ -2,7 +2,6 @@ package net.akoot.plugins.ultravanilla.commands;
 
 import net.akoot.plugins.ultravanilla.UltraPlugin;
 import net.akoot.plugins.ultravanilla.UltraVanilla;
-import net.akoot.plugins.ultravanilla.reference.References;
 import net.akoot.plugins.ultravanilla.util.StringUtil;
 import net.akoot.plugins.ultravanilla.util.Strings;
 import net.md_5.bungee.api.ChatColor;
@@ -30,13 +29,15 @@ public abstract class UltraCommand implements CommandExecutor, TabCompleter {
     protected Command command;
     protected String label;
     protected String[] args;
+    protected UltraVanilla uv;
 
     public UltraCommand(UltraPlugin plugin, ChatColor color) {
         this.plugin = plugin;
         this.strings = plugin.getStrings();
         this.random = new Random();
         this.color = color;
-        this.uvStrings = UltraVanilla.getInstance().getStrings();
+        this.uv = UltraVanilla.getInstance();
+        this.uvStrings = uv.getStrings();
     }
 
     public UltraCommand(UltraPlugin plugin, Strings strings) {
@@ -391,13 +392,16 @@ public abstract class UltraCommand implements CommandExecutor, TabCompleter {
      * @return The list of suggestions which are relevant to the query
      */
     protected List<String> getSuggestions(List<String> suggestions, String[] args) {
-        List<String> realSuggestions = new ArrayList<>();
-        for (String s : suggestions) {
-            if (args[args.length - 1].length() < args.length || s.toLowerCase().startsWith(args[args.length - 1].toLowerCase())) {
-                realSuggestions.add(s);
+        if (suggestions != null) {
+            List<String> realSuggestions = new ArrayList<>();
+            for (String s : suggestions) {
+                if (args[args.length - 1].length() < args.length || s.toLowerCase().startsWith(args[args.length - 1].toLowerCase())) {
+                    realSuggestions.add(s);
+                }
             }
+            return realSuggestions;
         }
-        return realSuggestions;
+        return null;
     }
 
     /**
@@ -407,7 +411,7 @@ public abstract class UltraCommand implements CommandExecutor, TabCompleter {
      * @return A message saying a player is offline
      */
     protected String playerOffline(String offlinePlayer) {
-        return uvStrings.getFormattedMessage(References.Messages.PLAYER_OFFLINE, "%p", offlinePlayer);
+        return uvStrings.getFormattedMessage(uvStrings.getFormattedMessage("error.player-offline"), "%p", offlinePlayer);
     }
 
     /**
@@ -417,7 +421,7 @@ public abstract class UltraCommand implements CommandExecutor, TabCompleter {
      * @return A message saying a player is invalid
      */
     protected String playerInvalid(String invalidPlayer) {
-        return uvStrings.getFormattedMessage(References.Messages.PLAYER_NULL, "%p", invalidPlayer);
+        return uvStrings.getFormattedMessage(uvStrings.getFormattedMessage("error.player-invalid"), "%p", invalidPlayer);
     }
 
     /**
@@ -427,7 +431,7 @@ public abstract class UltraCommand implements CommandExecutor, TabCompleter {
      * @return A string asserting you must be a player to do a certain action
      */
     protected String playerOnly(String action) {
-        return uvStrings.getFormattedMessage(References.Messages.PLAYER_ONLY, "%a", getVariable("player-only." + action));
+        return uvStrings.getFormattedMessage(uvStrings.getFormattedMessage("error.player-only"), "%a", getVariable("player-only." + action));
     }
 
     /**
@@ -437,7 +441,7 @@ public abstract class UltraCommand implements CommandExecutor, TabCompleter {
      * @return A string asserting you must have permission to perform a certain action
      */
     protected String noPermission(String action) {
-        return uvStrings.getFormattedMessage(References.Messages.NO_PERMISSION, "%a", getVariable("no-permission." + action));
+        return uvStrings.getFormattedMessage(uvStrings.getFormattedMessage("error.no-permission"), "%a", getVariable("no-permission." + action));
     }
 
     protected abstract boolean onCommand();

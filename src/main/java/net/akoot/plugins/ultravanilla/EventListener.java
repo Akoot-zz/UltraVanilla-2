@@ -1,18 +1,14 @@
 package net.akoot.plugins.ultravanilla;
 
-import net.akoot.plugins.ultravanilla.reference.References;
-import net.akoot.plugins.ultravanilla.serializable.PositionLite;
+import net.akoot.plugins.ultravanilla.util.Channel;
 import net.akoot.plugins.ultravanilla.util.Colors;
-import org.bukkit.configuration.file.YamlConfiguration;
+import net.akoot.plugins.ultravanilla.util.User;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import java.util.Collections;
-import java.util.List;
 
 public class EventListener implements Listener {
 
@@ -24,66 +20,41 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-
         // Create player and variable
         Player player = event.getPlayer();
-        String name = player.getName();
 
         // Register the user config in the Users.users Map
-        Users.registerUser(player);
-
-        // Get the user config
-        YamlConfiguration config = Users.getUser(player);
-
-        // Set the first-join time if they joined for the first time
-        if (!event.getPlayer().hasPlayedBefore()) {
-            config.set(References.User.FIRST_LOGIN, System.currentTimeMillis());
-            config.set(References.User.PAST_NAMES, Collections.singletonList(name));
-        }
-
-        // If the user has changed their username, add it to their past-names list
-        List<String> pastNames = config.getStringList(References.User.PAST_NAMES);
-        if (!pastNames.contains(name)) {
-            pastNames.add(name);
-            config.set(References.User.PAST_NAMES, pastNames);
-        }
-
-        // Set the last version of each hook
-        for (UltraPlugin hook : UltraVanilla.getHooks()) {
-            String lastVersionPath = References.User.LAST_VERSION + "." + hook.getDescription().getName();
-            String currentVersion = hook.getDescription().getVersion();
-            if (!config.get(lastVersionPath, currentVersion).equals(currentVersion)) {
-                player.performCommand("uv changelog " + hook.getDescription().getName().toLowerCase());
-                config.set(References.User.LAST_VERSION + "." + hook.getDescription().getName(), hook.getDescription().getVersion());
-            }
-        }
-
-        // Save the config
-        Users.saveUser(player);
+        plugin.getUsers().add(new User(player));
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
-
         // Create player variable
         Player player = event.getPlayer();
+        User user = plugin.getUser(player);
 
-        // Get the user config
-        YamlConfiguration config = Users.getUser(player);
+        if (user != null) {
+            // Set the playtime
+            long difference = player.getLastSeen() - player.getLastLogin();
+            user.setPlayTime(user.getPlayTime() + difference);
 
-        // Set the playtime
-        long difference = player.getLastSeen() - player.getLastLogin();
-        config.set(References.User.PLAYTIME, config.getLong(References.User.PLAYTIME, 0L) + difference);
+            // Set the last position
+            user.setLastLocation(player.getLocation());
 
-        // Set the last position
-        config.set(References.User.LAST_LOCATION, new PositionLite(player.getLocation()));
-
-        // Register the user config in the Users.users Map
-        Users.unregisterUser(player);
+            plugin.getUsers().remove(user);
+        }
     }
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        event.setMessage(Colors.translate(event.getMessage()));
+        String message = Colors.translate(event.getMessage());
+        User user = plugin.getUser(event.getPlayer());
+        Channel channel = plugin.getChannel(user.getPrimaryChannelId());
+        for (Player recipient : event.getRecipients()) {
+            if (channel.isPublic() || channel.isMember(recipient)) {
+                channel.chat(event.getPlayer(), recipient, message);
+            }
+        }
+        event.setCancelled(true);
     }
 }

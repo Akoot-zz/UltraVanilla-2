@@ -13,10 +13,10 @@ public class Config {
     protected YamlConfiguration config;
     protected String id;
     protected File file;
-    protected Class root;
+    protected Class<?> root;
     protected JavaPlugin plugin;
 
-    public Config(JavaPlugin plugin, Class root, String path, String id) {
+    public Config(JavaPlugin plugin, Class<?> root, String path, String id) {
 
         // Set the plugin
         this.plugin = plugin;

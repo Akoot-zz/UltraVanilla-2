@@ -127,10 +127,10 @@ public class UltravanillaCommand extends UltraCommand {
     @Override
     public List<String> onTabComplete() {
         List<String> suggestions = new ArrayList<>();
-        if (args.length == 1) {
+        if (args.length == 0) {
             suggestions.add("changelog");
             suggestions.add("reload");
-        } else if (args.length == 2) {
+        } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("changelog")) {
                 for (UltraPlugin hook : UltraVanilla.getHooks()) {
                     suggestions.add(hook.getDescription().getName().toLowerCase());

@@ -7,10 +7,50 @@ authors: [Akoot_]
 description: Core plugin for UItraVanilla
 website: https://akoot.net/plugins/ultravanilla
 commands:
+
+  # Channels
+  channelmod:
+    description: Add a player to mod in a channel (you must be a mod in that channel)
+    usage: /channelmod <player> <channel>
+  editchannel:
+    description: Customize a channel you moderate
+    usage: |
+      /editchannel <channel> id <new ID>
+      /editchannel <channel> name <new name>
+      /editchannel <channel> description <new description>
+      /editchannel <channel> color <new color>
+  leavechannel:
+    description: Leave a channel you are in (not applicable to public channels)
+    usage: /leavechannel <channel>
+  uninvite:
+    description: Remove a player from a channel (must be channel mod)
+    usage: /uninvite <player> <channel>
+  invite:
+    description: Add a player to a channel (must be channel mod)
+    usage: /invite <player> <channel>
+  deletechannel:
+    description: Delete a channel
+    permission: ultravanilla.command.channel.delete
+    usage: /deletechannel <id>
+  createchannel:
+    description: Create a channel
+    permission: ultravanilla.command.channel.create
+    usage: /createchannel <id>
+  listchannels:
+    description: List all the channels you have access to
+    permission: ultravanilla.command.channel
+    aliases: [ lc, list-channels, channellist, channels ]
+  channel:
+    description: Toggle channels you are a part of
+    permission: ultravanilla.command.channel
+    aliases: [ c, ch, p, party ]
+    usage: /channel <channel> [hide|show]
+
+  # UltraVanilla
   ultravanilla:
     description: UltraVanilla command
     permission: ultravanilla.command.ultravanilla
-    aliases: [uv]
+    aliases: [ uv ]
     usage: |
       /ultravanilla
       /ultravanilla reload [plugin]

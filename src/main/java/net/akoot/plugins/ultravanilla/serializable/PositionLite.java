@@ -49,6 +49,18 @@ public class PositionLite implements ConfigurationSerializable {
         this.world = world;
     }
 
+    public PositionLite(String name, Location location) {
+        this(
+                name,
+                location.getBlockX(),
+                location.getBlockY(),
+                location.getBlockZ(),
+                location.getYaw(),
+                location.getPitch(),
+                location.getWorld().getName()
+        );
+    }
+
     public PositionLite(Position position) {
         this(
                 position.getName(),
@@ -77,16 +89,12 @@ public class PositionLite implements ConfigurationSerializable {
         this(name, x, y, z, 0, 0, world);
     }
 
-    public PositionLite(String name, Location location) {
-        this(
-                name,
-                (int) Math.floor(location.getX()),
-                (int) Math.floor(location.getY()),
-                (int) Math.floor(location.getZ()),
-                location.getYaw(),
-                location.getPitch(),
-                location.getWorld().getName()
-        );
+    public void setLocation(Location location) {
+        x = location.getBlockX();
+        y = location.getBlockY();
+        z = location.getBlockZ();
+        yaw = location.getYaw();
+        pitch = location.getPitch();
     }
 
     public static PositionLite deserialize(Map<String, Object> map) {
