@@ -18,7 +18,7 @@ public class User extends OfflineUser {
      * @return Whether or not a player is flagged as AFK
      */
     public boolean isAfk() {
-        return config.getBoolean("afk", false);
+        return config.getBoolean(Map.AFK, false);
     }
 
     /**
@@ -27,6 +27,6 @@ public class User extends OfflineUser {
      * @param afk Whether or not a user should be AFK
      */
     public void setAfk(boolean afk) {
-        set("afk", afk);
+        set(Map.AFK, afk);
     }
 }

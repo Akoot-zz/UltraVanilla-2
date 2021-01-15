@@ -130,6 +130,8 @@ public final class UltraVanilla extends UltraPlugin {
         registerCommand("createchannel", channelCommand);
         registerCommand("listchannels", channelCommand);
         registerCommand("channel", channelCommand);
+        registerCommand("showchannel", channelCommand);
+        registerCommand("hidechannel", channelCommand);
 
         // Register events
         registerEvents(new EventListener(uv));

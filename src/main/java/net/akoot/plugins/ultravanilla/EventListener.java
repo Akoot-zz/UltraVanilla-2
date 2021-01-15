@@ -34,10 +34,6 @@ public class EventListener implements Listener {
         User user = plugin.getUser(player);
 
         if (user != null) {
-            // Set the playtime
-            long difference = player.getLastSeen() - player.getLastLogin();
-            user.setPlayTime(user.getPlayTime() + difference);
-
             // Set the last position
             user.setLastLocation(player.getLocation());
 
@@ -51,7 +47,7 @@ public class EventListener implements Listener {
         User user = plugin.getUser(event.getPlayer());
         Channel channel = plugin.getChannel(user.getPrimaryChannelId());
         for (Player recipient : event.getRecipients()) {
-            if (channel.isPublic() || channel.isMember(recipient)) {
+            if ((channel.isPublic() || channel.isMember(recipient)) && (!user.isChannelHidden(channel) && !plugin.getUser(recipient).isChannelHidden(channel))) {
                 channel.chat(event.getPlayer(), recipient, message);
             }
         }

@@ -21,11 +21,47 @@ public class OfflineUser {
     protected YamlConfiguration config;
     protected File usersDir;
 
+    public boolean isChannelHidden(String id) {
+        return getHiddenChannelIds().contains(id);
+    }
+
+    public boolean isChannelHidden(Channel channel) {
+        return getHiddenChannels().contains(channel);
+    }
+
+    public List<String> getHiddenChannelIds() {
+        return config.getStringList(Map.HIDDEN_CHANNELS);
+    }
+
     public OfflineUser(OfflinePlayer offlinePlayer) {
         this.offlinePlayer = offlinePlayer;
         usersDir = new File(UltraVanilla.getInstance().getDataFolder().getParentFile().getParentFile(), "users");
         configFile = new File(usersDir, offlinePlayer.getUniqueId().toString() + ".yml");
         loadConfig();
+    }
+
+    public List<Channel> getHiddenChannels() {
+        List<Channel> channels = new ArrayList<>();
+        for (String id : getHiddenChannelIds()) {
+            Channel channel = UltraVanilla.getInstance().getChannel(id);
+            if (channel != null) {
+                channels.add(channel);
+            }
+        }
+        return channels;
+    }
+
+    public void hideChannel(String id) {
+        addString(Map.HIDDEN_CHANNELS, id, false);
+    }
+
+    /**
+     * Get a user's primary channel, aka the one they are actively speaking in
+     *
+     * @return The user's primary channel
+     */
+    public String getPrimaryChannelId() {
+        return config.getString(Map.PRIMARY_CHANNEL, "global");
     }
 
     /**
@@ -114,21 +150,12 @@ public class OfflineUser {
     }
 
     /**
-     * Get a user's primary channel, aka the one they are actively speaking in
-     *
-     * @return The user's primary channel
-     */
-    public String getPrimaryChannelId() {
-        return config.getString("primary-channel", "global");
-    }
-
-    /**
      * Get a user's nickname
      *
      * @return A user's nickname, null if they don't have one
      */
     public String getNickName() {
-        return config.getString("nickname");
+        return config.getString(Map.NICKNAME);
     }
 
     /**
@@ -137,7 +164,16 @@ public class OfflineUser {
      * @return A list of a user's homes
      */
     public List<PositionLite> getHomes() {
-        return (List<PositionLite>) config.getList("homes", new ArrayList<PositionLite>());
+        return (List<PositionLite>) config.getList(Map.HOMES, new ArrayList<PositionLite>());
+    }
+
+    /**
+     * Set the primary channel of this user to one with the ID specified
+     *
+     * @param id The ID of the channel
+     */
+    public void setPrimaryChannel(String id) {
+        set(Map.PRIMARY_CHANNEL, id);
     }
 
     /**
@@ -150,15 +186,6 @@ public class OfflineUser {
     }
 
     /**
-     * Set the primary channel of this user to one with the ID specified
-     *
-     * @param id The ID of the channel
-     */
-    public void setPrimaryChannel(String id) {
-        set("primary-channel", id);
-    }
-
-    /**
      * Change a channel's visibility for a player. If a channel is invisible, the user will not see any incoming
      * messages from it.
      *
@@ -166,13 +193,32 @@ public class OfflineUser {
      * @param visible Whether or not to hide the channel
      */
     public void setChannelVisible(String id, boolean visible) {
-        List<String> visibleChannels = config.getStringList("visible-channels");
+        List<String> visibleChannels = config.getStringList(Map.HIDDEN_CHANNELS);
         if (visible) {
             visibleChannels.add(id);
         } else {
             visibleChannels.remove(id);
         }
-        set("visible-channels", visibleChannels);
+        set(Map.HIDDEN_CHANNELS, visibleChannels);
+    }
+
+    /**
+     * Set the home of a user. If the home exists, the location will be overwritten
+     *
+     * @param name     The name of the home to set
+     * @param location The location of the home to set
+     */
+    public void setHome(String name, Location location) {
+        List<PositionLite> homes = getHomes();
+        for (PositionLite home : homes) {
+            if (home.getName().equalsIgnoreCase(name)) {
+                home.setLocation(location);
+                set(Map.HOMES, homes);
+                return;
+            }
+        }
+        homes.add(new PositionLite(name, location));
+        set(Map.HOMES, homes);
     }
 
     /**
@@ -236,25 +282,6 @@ public class OfflineUser {
     }
 
     /**
-     * Set the home of a user. If the home exists, the location will be overwritten
-     *
-     * @param name     The name of the home to set
-     * @param location The location of the home to set
-     */
-    public void setHome(String name, Location location) {
-        List<PositionLite> homes = getHomes();
-        for (PositionLite home : homes) {
-            if (home.getName().equalsIgnoreCase(name)) {
-                home.setLocation(location);
-                set("homes", homes);
-                return;
-            }
-        }
-        homes.add(new PositionLite(name, location));
-        set("homes", homes);
-    }
-
-    /**
      * Remove a home from a user
      *
      * @param name The name of the home to remove
@@ -265,7 +292,7 @@ public class OfflineUser {
         for (PositionLite home : homes) {
             if (home.getName().equalsIgnoreCase(name)) {
                 homes.remove(home);
-                set("homes", homes);
+                set(Map.HOMES, homes);
                 return true;
             }
         }
@@ -280,7 +307,7 @@ public class OfflineUser {
      * @return Whether or not the alias matches the items listed above
      */
     public boolean isKnownAs(String alias, boolean ignoreCase) {
-        List<String> aliases = config.getStringList("aliases");
+        List<String> aliases = config.getStringList(Map.ALIASES);
         String nickName = getNickName();
         String regex = (nickName != null ? nickName + "|" : "") + (aliases.isEmpty() ? String.join("|", aliases) : "") + "|" + offlinePlayer.getName();
         if (!ignoreCase) {
@@ -288,6 +315,14 @@ public class OfflineUser {
         } else {
             return alias.toLowerCase(Locale.ROOT).matches(regex.toLowerCase(Locale.ROOT));
         }
+    }
+
+    public Location getLastLocation() {
+        PositionLite position = config.getSerializable(Map.LAST_POSITION, PositionLite.class);
+        if (position != null) {
+            return position.getLocation();
+        }
+        return null;
     }
 
     /**
@@ -304,23 +339,21 @@ public class OfflineUser {
         }
     }
 
-    public long getPlayTime() {
-        return config.getLong("playtime");
-    }
-
-    public void setPlayTime(long playTime) {
-        set("playtime", playTime);
-    }
-
-    public Location getLastLocation() {
-        PositionLite position = config.getSerializable("last-position", PositionLite.class);
-        if (position != null) {
-            return position.getLocation();
-        }
-        return null;
-    }
-
     public void setLastLocation(Location location) {
-        set("last-position", new PositionLite(location));
+        set(Map.LAST_POSITION, new PositionLite(location));
+    }
+
+    public void showChannel(String id) {
+        removeString(Map.HIDDEN_CHANNELS, id);
+    }
+
+    public static class Map {
+        public static final String HIDDEN_CHANNELS = "channels.hidden";
+        public static final String LAST_POSITION = "data.logout-location";
+        public static final String NICKNAME = "profile.nickname";
+        public static final String ALIASES = "profile.aliases";
+        public static final String HOMES = "data.homes";
+        public static final String PRIMARY_CHANNEL = "channels.primary";
+        public static final String AFK = "data.afk";
     }
 }

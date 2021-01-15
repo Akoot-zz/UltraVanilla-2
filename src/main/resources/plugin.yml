@@ -11,6 +11,7 @@ commands:
   # Channels
   channelmod:
     description: Add a player to mod in a channel (you must be a mod in that channel)
+    permission: ultravanilla.command.channel
     usage: /channelmod <player> <channel>
   editchannel:
     description: Customize a channel you moderate
@@ -41,10 +42,18 @@ commands:
     permission: ultravanilla.command.channel
     aliases: [ lc, list-channels, channellist, channels ]
   channel:
-    description: Toggle channels you are a part of
+    description: Set your primary channel
     permission: ultravanilla.command.channel
     aliases: [ c, ch, p, party ]
-    usage: /channel <channel> [hide|show]
+    usage: /channel <channel>
+  hidechannel:
+    description: Hide a channel you are part of
+    permission: ultravanilla.command.channel
+    usage: /hidechannel <channel>
+  showchannel:
+    description: Show a channel you are part of
+    permission: ultravanilla.command.channel
+    usage: /showchannel <channel>
 
   # UltraVanilla
   ultravanilla:
